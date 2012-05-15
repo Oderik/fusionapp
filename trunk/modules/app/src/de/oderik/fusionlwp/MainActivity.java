@@ -24,8 +24,6 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 
     this.engine = fusionWallpaperService.onCreateEngine();
 
-    final SurfaceView surfaceView = (SurfaceView) findViewById(R.id.surface);
-    surfaceView.getHolder().addCallback(this);
   }
 
   @Override
