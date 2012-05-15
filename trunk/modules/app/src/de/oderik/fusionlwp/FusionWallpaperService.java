@@ -39,7 +39,7 @@ public class FusionWallpaperService extends WallpaperService {
 
   class FusionEngine extends Engine {
 
-    private final Paint mPaint = new Paint();
+    private final Paint paint = new Paint();
     private float mCenterX;
     private float mCenterY;
 
@@ -51,13 +51,14 @@ public class FusionWallpaperService extends WallpaperService {
 
     FusionEngine() {
       // Create a Paint to draw the lines for our cube
-      final Paint paint = mPaint;
+      final Paint paint = this.paint;
       paint.setColor(0xffffffff);
       paint.setAntiAlias(true);
       paint.setStrokeWidth(2);
       paint.setStrokeCap(Paint.Cap.ROUND);
       paint.setStyle(Paint.Style.STROKE);
       paint.setTextAlign(Paint.Align.CENTER);
+      paint.setTextSize(20);
     }
 
     Runnable drawEverything = new DrawRunnable() {
@@ -71,6 +72,7 @@ public class FusionWallpaperService extends WallpaperService {
     Runnable drawCountdown = new DrawRunnable() {
       @Override
       void draw(final Canvas canvas) {
+        drawBackground(canvas); //TODO remove
         drawCountdown(canvas);
       }
     };
@@ -147,7 +149,7 @@ public class FusionWallpaperService extends WallpaperService {
       c.save();
       c.translate(mCenterX, mCenterY);
       final String time = DateFormat.getTimeInstance().format(new Date());
-      c.drawText(time, 0, 0, mPaint);
+      c.drawText(time, 0, 0, paint);
       c.restore();
     }
 
