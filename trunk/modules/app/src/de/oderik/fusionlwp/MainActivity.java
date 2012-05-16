@@ -1,15 +1,18 @@
 package de.oderik.fusionlwp;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.service.wallpaper.WallpaperService;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.TextView;
 
 public class MainActivity extends Activity implements SurfaceHolder.Callback {
 
   private FusionWallpaperService  fusionWallpaperService;
   private WallpaperService.Engine engine;
+  private Typeface antonTypeface;
 
   /**
    * Called when the activity is first created.
@@ -17,7 +20,11 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.main);
+    setContentView(R.layout.alternative);
+
+    antonTypeface = Typeface.createFromAsset(getAssets(), "Anton.ttf");
+
+    ((TextView) findViewById(R.id.text)).setTypeface(antonTypeface);
 
     fusionWallpaperService = new FusionWallpaperService();
     fusionWallpaperService.onCreate();

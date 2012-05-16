@@ -9,28 +9,12 @@ import android.service.wallpaper.WallpaperService;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 /**
  * @author Maik.Riechel
  * @since 15.05.12 16:19
  */
 public class FusionWallpaperService extends WallpaperService {
   private final Handler handler = new Handler();
-
-  private final static Calendar FUSION_CALENDAR = GregorianCalendar.getInstance();
-
-  {
-    //FUSION_CALENDAR.clear();
-    ////TODO timezone
-    //FUSION_CALENDAR.set(Calendar.YEAR, 2012);
-    //FUSION_CALENDAR.set(Calendar.MONTH, Calendar.JUNE);
-    //FUSION_CALENDAR.set(Calendar.DAY_OF_MONTH, 28);
-    //FUSION_CALENDAR.set(Calendar.HOUR_OF_DAY, 18);
-    //FUSION_CALENDAR.set(Calendar.MINUTE, 0);
-    FUSION_CALENDAR.roll(Calendar.SECOND, -30);
-  }
 
   @Override
   public Engine onCreateEngine() {
@@ -129,14 +113,6 @@ public class FusionWallpaperService extends WallpaperService {
     }
 
 
-    private long timeToNextSecond() {
-      return 1000 - (System.currentTimeMillis() % 1000);
-    }
-
-    private long timeToFusion() {
-      final Calendar now = Calendar.getInstance();
-      return FUSION_CALENDAR.getTimeInMillis() - now.getTimeInMillis();
-    }
 
     void drawBackground(final Canvas c) {
       this.background = getResources().getDrawable(R.drawable.background);
@@ -151,26 +127,15 @@ public class FusionWallpaperService extends WallpaperService {
       Log.d("Fusionsize", String.format("width=%d height=%d", desiredWidth, desiredHeight));
     }
 
-    private final static long SECOND = 1000;
-    private final static long MINUTE = 60 * SECOND;
-    private final static long HOUR   = 60 * MINUTE;
-    private final static long DAY    = 24 * HOUR;
-
-
     void drawCountdown(Canvas c) {
       c.save();
       c.translate(mCenterX, mCenterY);
 
-      final long timeToFusion = timeToFusion();
+      final long timeToFusion = FusionEventTiming.timeToFusion();
 
       final String time;
       if (timeToFusion > 0) {
-        final long days = timeToFusion / DAY;
-        final long hours = timeToFusion % DAY / HOUR;
-        final long minutes = timeToFusion % HOUR / MINUTE;
-        final long seconds = timeToFusion % MINUTE / SECOND;
-
-        time = String.format("%02dd %02dh %02dm %02ds", days, hours, minutes, seconds);
+        time = FusionEventTiming.format(timeToFusion);
       } else {
         time = "Takeoff!";
         fusionInFuture = false;
@@ -178,6 +143,7 @@ public class FusionWallpaperService extends WallpaperService {
       c.drawText(time, 0, 0, paint);
       c.restore();
     }
+
 
 
     abstract class DrawRunnable implements Runnable {
@@ -197,7 +163,7 @@ public class FusionWallpaperService extends WallpaperService {
         // Reschedule the next redraw
         handler.removeCallbacks(drawCountdown);
         if (visible && fusionInFuture) {
-          handler.postDelayed(drawCountdown, timeToNextSecond());
+          handler.postDelayed(drawCountdown, FusionEventTiming.timeToNextSecond());
         }
       }
 
