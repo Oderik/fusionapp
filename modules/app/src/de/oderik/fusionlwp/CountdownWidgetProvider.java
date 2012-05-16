@@ -4,12 +4,11 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.*;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.widget.RemoteViews;
-
-import static de.oderik.fusionlwp.FusionEventTiming.timeToFusion;
-import static de.oderik.fusionlwp.FusionEventTiming.format;
 
 /**
  * Created: 16.05.12
@@ -19,25 +18,21 @@ import static de.oderik.fusionlwp.FusionEventTiming.format;
 public class CountdownWidgetProvider extends AppWidgetProvider {
   private static final String TAG = CountdownWidgetProvider.class.getName();
 
+  final CountDownDrawable countDownDrawable = new CountDownDrawable();
+
   @Override
   public void onUpdate(final Context context, final AppWidgetManager appWidgetManager, final int[] appWidgetIds) {
     if (BuildConfig.DEBUG) {
       Log.d(TAG, "onUpdate");
     }
     super.onUpdate(context, appWidgetManager, appWidgetIds);
-
     final Typeface antonTypeface = Typeface.createFromAsset(context.getAssets(), "Anton.ttf");
+    countDownDrawable.setTypeface(antonTypeface);
+    countDownDrawable.setBounds(0, 0, 299, 79);
+    countDownDrawable.setLevel((int) FusionEventTiming.timeToFusion());
     final Bitmap bitmap = Bitmap.createBitmap(300, 80, Bitmap.Config.ARGB_8888);
     final Canvas canvas = new Canvas(bitmap);
-    final Paint paint = new Paint();
-    paint.setAntiAlias(true);
-    paint.setSubpixelText(true);
-    paint.setTypeface(antonTypeface);
-    paint.setStyle(Paint.Style.FILL);
-    paint.setColor(Color.BLACK);
-    paint.setTextSize(30);
-    paint.setTextAlign(Paint.Align.CENTER);
-    canvas.drawText(format(timeToFusion()), 150, 60, paint);
+    countDownDrawable.draw(canvas);
 
     final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.countdown_widget);
     views.setImageViewBitmap(R.id.text, bitmap);

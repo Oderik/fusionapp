@@ -1,7 +1,6 @@
 package de.oderik.fusionlwp;
 
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
@@ -23,27 +22,17 @@ public class FusionWallpaperService extends WallpaperService {
 
   class FusionEngine extends Engine {
 
-    private final Paint paint = new Paint();
-    private float mCenterX;
-    private float mCenterY;
-
     private boolean visible;
     private Rect bounds  = new Rect(0, 0, 1, 1);
     private int  xPixels = 0;
     private int  yPixels = 0;
     private Drawable background;
     private boolean fusionInFuture = true;
+    final private CountDownDrawable countDownDrawable;
 
     FusionEngine() {
-      // Create a Paint to draw the lines for our cube
-      final Paint paint = this.paint;
-      paint.setColor(0xffffffff);
-      paint.setAntiAlias(true);
-      paint.setStrokeWidth(2);
-      paint.setStrokeCap(Paint.Cap.ROUND);
-      paint.setStyle(Paint.Style.STROKE);
-      paint.setTextAlign(Paint.Align.CENTER);
-      paint.setTextSize(20);
+      countDownDrawable = new CountDownDrawable();
+      //todo setbounds und so
     }
 
     Runnable drawEverything = new DrawRunnable() {
@@ -83,8 +72,6 @@ public class FusionWallpaperService extends WallpaperService {
     public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
       super.onSurfaceChanged(holder, format, width, height);
       // store the center of the surface, so we can draw the cube in the right spot
-      mCenterX = width / 2.0f;
-      mCenterY = height / 2.0f;
 
       bounds.right = width;
       bounds.bottom = height;
@@ -128,20 +115,7 @@ public class FusionWallpaperService extends WallpaperService {
     }
 
     void drawCountdown(Canvas c) {
-      c.save();
-      c.translate(mCenterX, mCenterY);
-
-      final long timeToFusion = FusionEventTiming.timeToFusion();
-
-      final String time;
-      if (timeToFusion > 0) {
-        time = FusionEventTiming.format(timeToFusion);
-      } else {
-        time = "Takeoff!";
-        fusionInFuture = false;
-      }
-      c.drawText(time, 0, 0, paint);
-      c.restore();
+      countDownDrawable.draw(c);
     }
 
 
