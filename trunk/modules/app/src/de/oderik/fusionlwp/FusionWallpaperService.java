@@ -9,9 +9,7 @@ import android.service.wallpaper.WallpaperService;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
-import java.text.DateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
@@ -22,14 +20,16 @@ public class FusionWallpaperService extends WallpaperService {
   private final Handler handler = new Handler();
 
   private final static Calendar FUSION_CALENDAR = GregorianCalendar.getInstance();
+
   {
-    FUSION_CALENDAR.clear();
-    //TODO timezone
-    FUSION_CALENDAR.set(Calendar.YEAR, 2012);
-    FUSION_CALENDAR.set(Calendar.MONTH, Calendar.JUNE);
-    FUSION_CALENDAR.set(Calendar.DAY_OF_MONTH, 28);
-    FUSION_CALENDAR.set(Calendar.HOUR_OF_DAY, 18);
-    FUSION_CALENDAR.set(Calendar.MINUTE, 0);
+    //FUSION_CALENDAR.clear();
+    ////TODO timezone
+    //FUSION_CALENDAR.set(Calendar.YEAR, 2012);
+    //FUSION_CALENDAR.set(Calendar.MONTH, Calendar.JUNE);
+    //FUSION_CALENDAR.set(Calendar.DAY_OF_MONTH, 28);
+    //FUSION_CALENDAR.set(Calendar.HOUR_OF_DAY, 18);
+    //FUSION_CALENDAR.set(Calendar.MINUTE, 0);
+    FUSION_CALENDAR.roll(Calendar.SECOND, -30);
   }
 
   @Override
@@ -44,10 +44,11 @@ public class FusionWallpaperService extends WallpaperService {
     private float mCenterY;
 
     private boolean visible;
-    private Rect bounds = new Rect(0, 0, 1, 1);
-    private int xPixels = 0;
-    private int yPixels = 0;
+    private Rect bounds  = new Rect(0, 0, 1, 1);
+    private int  xPixels = 0;
+    private int  yPixels = 0;
     private Drawable background;
+    private boolean fusionInFuture = true;
 
     FusionEngine() {
       // Create a Paint to draw the lines for our cube
@@ -132,6 +133,11 @@ public class FusionWallpaperService extends WallpaperService {
       return 1000 - (System.currentTimeMillis() % 1000);
     }
 
+    private long timeToFusion() {
+      final Calendar now = Calendar.getInstance();
+      return FUSION_CALENDAR.getTimeInMillis() - now.getTimeInMillis();
+    }
+
     void drawBackground(final Canvas c) {
       this.background = getResources().getDrawable(R.drawable.background);
       this.background.setBounds(xPixels, yPixels, getWallpaperDesiredMinimumWidth() + xPixels, getWallpaperDesiredMinimumHeight() + yPixels);
@@ -145,13 +151,34 @@ public class FusionWallpaperService extends WallpaperService {
       Log.d("Fusionsize", String.format("width=%d height=%d", desiredWidth, desiredHeight));
     }
 
+    private final static long SECOND = 1000;
+    private final static long MINUTE = 60 * SECOND;
+    private final static long HOUR   = 60 * MINUTE;
+    private final static long DAY    = 24 * HOUR;
+
+
     void drawCountdown(Canvas c) {
       c.save();
       c.translate(mCenterX, mCenterY);
-      final String time = DateFormat.getTimeInstance().format(new Date());
+
+      final long timeToFusion = timeToFusion();
+
+      final String time;
+      if (timeToFusion > 0) {
+        final long days = timeToFusion / DAY;
+        final long hours = timeToFusion % DAY / HOUR;
+        final long minutes = timeToFusion % HOUR / MINUTE;
+        final long seconds = timeToFusion % MINUTE / SECOND;
+
+        time = String.format("%02dd %02dh %02dm %02ds", days, hours, minutes, seconds);
+      } else {
+        time = "Takeoff!";
+        fusionInFuture = false;
+      }
       c.drawText(time, 0, 0, paint);
       c.restore();
     }
+
 
     abstract class DrawRunnable implements Runnable {
       @Override
@@ -169,7 +196,7 @@ public class FusionWallpaperService extends WallpaperService {
         }
         // Reschedule the next redraw
         handler.removeCallbacks(drawCountdown);
-        if (visible) {
+        if (visible && fusionInFuture) {
           handler.postDelayed(drawCountdown, timeToNextSecond());
         }
       }
