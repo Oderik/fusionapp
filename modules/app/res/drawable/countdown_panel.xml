@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-  <item android:drawable="@drawable/bg_tafel"/>
-  <item android:drawable="@drawable/tiled_fusion_pattern"/>
+  <item android:drawable="@drawable/panel_background"/>
+  <item android:drawable="@drawable/box_border_standard"/>
 </layer-list>
