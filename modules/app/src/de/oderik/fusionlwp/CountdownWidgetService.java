@@ -35,12 +35,12 @@ public class CountdownWidgetService extends Service {
 
   private void updateWidget(final int[] appWidgetIds) {
     final Typeface antonTypeface = Typeface.createFromAsset(getAssets(), "Anton.ttf");
-    final CountDownDrawable countDownDrawable = new CountDownDrawable(this);
-    countDownDrawable.setTypeface(antonTypeface);
-    countDownDrawable.setBounds(0, 0, countDownDrawable.getIntrinsicWidth() - 1, countDownDrawable.getIntrinsicHeight() - 1);
-    final Bitmap bitmap = Bitmap.createBitmap(countDownDrawable.getIntrinsicWidth(), countDownDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+    final CountdownDrawable countdownDrawable = new CountdownDrawable(this);
+    countdownDrawable.setTypeface(antonTypeface);
+    countdownDrawable.setBounds(0, 0, countdownDrawable.getIntrinsicWidth() - 1, countdownDrawable.getIntrinsicHeight() - 1);
+    final Bitmap bitmap = Bitmap.createBitmap(countdownDrawable.getIntrinsicWidth(), countdownDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
     final Canvas canvas = new Canvas(bitmap);
-    countDownDrawable.draw(canvas);
+    countdownDrawable.draw(canvas);
 
     final RemoteViews views = new RemoteViews(getPackageName(), R.layout.countdown_widget);
     views.setImageViewBitmap(R.id.countdown, bitmap);
