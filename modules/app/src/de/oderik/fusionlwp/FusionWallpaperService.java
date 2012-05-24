@@ -1,7 +1,10 @@
 package de.oderik.fusionlwp;
 
 import android.app.WallpaperManager;
-import android.graphics.*;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;

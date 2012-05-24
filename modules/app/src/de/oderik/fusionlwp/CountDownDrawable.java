@@ -10,8 +10,8 @@ import android.graphics.drawable.Drawable;
  * @author Oderik
  */
 public class CountDownDrawable extends Drawable {
-  private static final String SAMPLE = "00:00:00:00";
-  public static final int DEFAULT_TEXT_SIZE = 20;
+
+  public static final int DEFAULT_TEXT_SIZE = 25;
   public static final int DEFAULT_TEXT_COLOR = Color.BLACK;
 
   private final Paint paint;
@@ -49,6 +49,8 @@ public class CountDownDrawable extends Drawable {
     drawCountdown(canvas);
   }
 
+
+
   private void drawBackground(final Canvas canvas) {
     canvas.save();
     backgroundDrawable.setBounds(getBounds());
@@ -58,8 +60,14 @@ public class CountDownDrawable extends Drawable {
 
   private void drawCountdown(final Canvas canvas) {
     final Rect bounds = getBounds();
-    final float centerX = (bounds.right - bounds.left) / 2 + bounds.left;
-    final float centerY = (bounds.bottom - bounds.top) / 2 + bounds.top;
+    if (bounds.width() < 1) {
+      bounds.right = bounds.left + getMinimumWidth();
+    }
+    if (bounds.height() < 1) {
+      bounds.bottom = bounds.top + getMinimumHeight();
+    }
+    final float xOffset = bounds.left + (bounds.width()) / 2;
+    final float yOffset = bounds.top + (bounds.height() - paint.ascent()) / 2;
 
     final long timeLeft = FusionEventTiming.timeToFusion();
 
@@ -69,7 +77,7 @@ public class CountDownDrawable extends Drawable {
     } else {
       time = "Takeoff!";
     }
-    canvas.drawText(time, centerX, centerY, paint);
+    canvas.drawText(time, xOffset, yOffset, paint);
   }
 
   @Override
