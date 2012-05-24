@@ -16,6 +16,8 @@
       <meta-data android:name="android.service.wallpaper"
                  android:resource="@xml/fusion"/>
     </service>
+    <service android:name=".CountdownWidgetService" android:label="Fusion Countdown Widget"/>
+    <!--
     <receiver android:name=".CountdownWidgetProvider"
               android:label="@string/label_countdownWidget">
       <intent-filter>
@@ -24,6 +26,7 @@
       <meta-data android:name="android.appwidget.provider"
                  android:resource="@xml/countdown_widget"/>
     </receiver>
+    -->
     <receiver android:name=".BannerWidgetProvider"
               android:label="@string/label_bannerWidget">
       <intent-filter>

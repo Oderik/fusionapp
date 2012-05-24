@@ -83,6 +83,9 @@ public class FusionWallpaperService extends WallpaperService {
       } else {
         handler.removeCallbacks(drawCountdown);
       }
+      if (BuildConfig.DEBUG) {
+        Log.d(TAG, String.format("visibility is %B", visible));
+      }
     }
 
     @Override
@@ -137,6 +140,10 @@ public class FusionWallpaperService extends WallpaperService {
     abstract class DrawRunnable implements Runnable {
       @Override
       public void run() {
+        if (BuildConfig.DEBUG) {
+          Log.v(TAG, "about to draw something");
+        }
+
         final SurfaceHolder holder = getSurfaceHolder();
 
         Canvas canvas = null;
