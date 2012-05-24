@@ -3,4 +3,7 @@
   <string name="app_name">Fusion 2012 Countdown</string>
   <string name="descriptionWidget">Fusion Countdown</string>
   <string name="lwp_description">The literal wallpaper of the current Fusion Festival homepage.</string>
+  <string name="label_bannerWidget">Banner</string>
+  <string name="label_countdownWidget">Countdown</string>
+  <string name="label_logoWidget">Logo</string>
 </resources>

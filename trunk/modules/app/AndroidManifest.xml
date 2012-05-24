@@ -16,12 +16,29 @@
       <meta-data android:name="android.service.wallpaper"
                  android:resource="@xml/fusion"/>
     </service>
-    <receiver android:name=".CountdownWidgetProvider">
+    <receiver android:name=".CountdownWidgetProvider"
+              android:label="@string/label_countdownWidget">
       <intent-filter>
         <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
       </intent-filter>
       <meta-data android:name="android.appwidget.provider"
                  android:resource="@xml/countdown_widget"/>
+    </receiver>
+    <receiver android:name=".BannerWidgetProvider"
+              android:label="@string/label_bannerWidget">
+      <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+      </intent-filter>
+      <meta-data android:name="android.appwidget.provider"
+                 android:resource="@xml/banner_widget"/>
+    </receiver>
+    <receiver android:name=".LogoWidgetProvider"
+              android:label="@string/label_logoWidget">
+      <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+      </intent-filter>
+      <meta-data android:name="android.appwidget.provider"
+                 android:resource="@xml/logo_widget"/>
     </receiver>
     <activity android:name="MainActivity"
               android:label="@string/app_name">
