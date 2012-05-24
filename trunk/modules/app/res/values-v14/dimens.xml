@@ -1,0 +1,4 @@
+<resources>
+  <dimen name="horizontalWidgetPadding">0dp</dimen>
+  <dimen name="verticalWidgetPadding">0dp</dimen>
+</resources>
