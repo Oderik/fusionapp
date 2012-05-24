@@ -1,14 +1,12 @@
 package de.oderik.fusionlwp;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Typeface;
 import android.util.Log;
-import android.widget.RemoteViews;
 
 /**
  * Created: 16.05.12
@@ -20,30 +18,17 @@ public class CountdownWidgetProvider extends AppWidgetProvider {
 
   @Override
   public void onUpdate(final Context context, final AppWidgetManager appWidgetManager, final int[] appWidgetIds) {
+    final AlarmManager alarmManager = getAlarmManager(context);
+
+    final Intent intent = new Intent(context, CountdownWidgetService.class);
+    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
+
+    final PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+    alarmManager.setRepeating(AlarmManager.RTC, System.currentTimeMillis() / 1000 * 1000 + 1000, 1000, pendingIntent);
     if (BuildConfig.DEBUG) {
-      Log.d(TAG, "onUpdate");
+      Log.d(TAG, String.format("onUpdate (%s)", pendingIntent));
     }
-    super.onUpdate(context, appWidgetManager, appWidgetIds);
-    final Typeface antonTypeface = Typeface.createFromAsset(context.getAssets(), "Anton.ttf");
-    final CountDownDrawable countDownDrawable = new CountDownDrawable(context);
-    countDownDrawable.setTypeface(antonTypeface);
-    countDownDrawable.setBounds(0, 0, countDownDrawable.getIntrinsicWidth() - 1, countDownDrawable.getIntrinsicHeight() - 1);
-    final Bitmap bitmap = Bitmap.createBitmap(countDownDrawable.getIntrinsicWidth(), countDownDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-    final Canvas canvas = new Canvas(bitmap);
-    countDownDrawable.draw(canvas);
-
-    final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.countdown_widget);
-    views.setImageViewBitmap(R.id.countdown, bitmap);
-
-    appWidgetManager.updateAppWidget(appWidgetIds, views);
-  }
-
-  @Override
-  public void onReceive(final Context context, final Intent intent) {
-    if (BuildConfig.DEBUG) {
-      Log.d(TAG, String.format("onReceive: %s", intent.getAction()));
-    }
-    super.onReceive(context, intent);
   }
 
   @Override
@@ -54,19 +39,19 @@ public class CountdownWidgetProvider extends AppWidgetProvider {
     super.onDeleted(context, appWidgetIds);
   }
 
-  @Override
-  public void onEnabled(final Context context) {
-    if (BuildConfig.DEBUG) {
-      Log.d(TAG, "onEnabled");
-    }
-    super.onEnabled(context);
+  private AlarmManager getAlarmManager(final Context context) {
+    return (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
   }
 
   @Override
   public void onDisabled(final Context context) {
-    if (BuildConfig.DEBUG) {
-      Log.d(TAG, "onDisabled");
-    }
     super.onDisabled(context);
+    final AlarmManager alarmManager = getAlarmManager(context);
+    final Intent intent = new Intent(context, CountdownWidgetService.class);
+    final PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+    alarmManager.cancel(pendingIntent);
+    if (BuildConfig.DEBUG) {
+      Log.d(TAG, String.format("onDisabled (%s)", pendingIntent));
+    }
   }
 }
