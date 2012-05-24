@@ -10,7 +10,7 @@ import android.graphics.drawable.Drawable;
  *
  * @author Oderik
  */
-public class CountDownDrawable extends Drawable {
+public class CountdownDrawable extends Drawable {
   public static final int DEFAULT_TEXT_COLOR = Color.BLACK;
 
   private final Paint paint;
@@ -18,7 +18,7 @@ public class CountDownDrawable extends Drawable {
   private int intrinsicWidth;
   private int intrinsicHeight;
 
-  public CountDownDrawable(final Context context) {
+  public CountdownDrawable(final Context context) {
     Resources resources = context.getResources();
     intrinsicWidth = resources.getDimensionPixelOffset(R.dimen.countdownWidth);
     intrinsicHeight = resources.getDimensionPixelOffset(R.dimen.countdownHeight);

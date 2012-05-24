@@ -1,15 +1,16 @@
 package de.oderik.fusionlwp;
 
 import android.app.WallpaperManager;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Typeface;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.*;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
+import android.widget.Toast;
 
 /**
  * @author Maik.Riechel
@@ -25,23 +26,100 @@ public class FusionWallpaperService extends WallpaperService {
     return new FusionEngine();
   }
 
-  class FusionEngine extends Engine {
+  class FusionEngine extends Engine implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private boolean visible;
-    private int  xPixels = 0;
-    private int  yPixels = 0;
+    private int surfaceWidth;
+    private int surfaceHeight;
+    private int xPixels = 0;
+    private int yPixels = 0;
+
+    private float countdownPosX;
+    private float countdownPosY;
     private boolean fusionInFuture = true;
-    final private CountDownDrawable countdownDrawable;
+
+    private SharedPreferences preferences;
+    final private CountdownDrawable countdownDrawable;
     private Bitmap backgroundBitmap;
 
+    private boolean drag = false;
+    private float initialDragX;
+    private float initialDragY;
+    private float initialPosX;
+    private float initialPosY;
+    private Matrix matrix = null;
+
+    private float[] points = new float[2];
+
+
     FusionEngine() {
-      countdownDrawable = new CountDownDrawable(FusionWallpaperService.this);
+      countdownDrawable = new CountdownDrawable(FusionWallpaperService.this);
       countdownDrawable.setTypeface(Typeface.createFromAsset(getAssets(), "Anton.ttf"));
 
       final WallpaperManager wallpaperManager = WallpaperManager.getInstance(FusionWallpaperService.this);
       final int desiredMinimumHeight = wallpaperManager.getDesiredMinimumHeight();
       final int desiredMinimumWidth = wallpaperManager.getDesiredMinimumWidth();
       updateBackgroundBitmap(desiredMinimumWidth, desiredMinimumHeight);
+    }
+
+
+    @Override
+    public void onTouchEvent(final MotionEvent event) {
+      if (isPreview()) {
+        switch (event.getAction()) {
+          case MotionEvent.ACTION_DOWN:
+            final Rect countdownBounds = countdownDrawable.getBounds();
+            if (countdownBounds.contains((int) event.getX(), (int) event.getY())) {
+              drag = true;
+              initialDragX = event.getX();
+              initialDragY = event.getY();
+              initialPosX = countdownPosX;
+              initialPosY = countdownPosY;
+
+              matrix = new Matrix();
+              final int intrinsicWidth = countdownDrawable.getIntrinsicWidth();
+              final int intrinsicHeight = countdownDrawable.getIntrinsicHeight();
+              matrix.postScale(1f / Math.max(surfaceWidth - intrinsicWidth, 1), 1f / Math.max(surfaceHeight - intrinsicHeight, 1));
+              points[0] = event.getX();
+              points[1] = event.getY();
+              matrix.mapPoints(points);
+              matrix.postTranslate(countdownPosX - points[0], countdownPosY - points[1]);
+            }
+            break;
+          case MotionEvent.ACTION_MOVE:
+            if (drag) {
+              points[0] = event.getX();
+              points[1] = event.getY();
+              matrix.mapPoints(points);
+              countdownPosX = Math.max(0f, Math.min(1f, points[0]));
+              countdownPosY = Math.max(0f, Math.min(1f, points[1]));
+              updateCountdownBounds();
+              drawEverything.run();
+            }
+            break;
+          case MotionEvent.ACTION_UP:
+            drag = false;
+            savePosition();
+            break;
+          default:
+            if (drag) {
+              drag = false;
+              countdownPosX = initialPosX;
+              countdownPosY = initialPosY;
+              drawEverything.run();
+            }
+            break;
+        }
+      }
+    }
+
+
+    private void savePosition() {
+      final SharedPreferences preferences = getSharedPreferences();
+      SharedPreferences.Editor editor = preferences.edit();
+      editor.putFloat("posX", countdownPosX);
+      editor.putFloat("posY", countdownPosY);
+      editor.apply();
     }
 
     private void updateBackgroundBitmap(final int width, final int height) {
@@ -68,11 +146,31 @@ public class FusionWallpaperService extends WallpaperService {
       }
     };
 
+    @Override
+    public void onCreate(final SurfaceHolder surfaceHolder) {
+      super.onCreate(surfaceHolder);
+      preferences = getSharedPreferences();
+      loadCountdownPosition();
+      preferences.registerOnSharedPreferenceChangeListener(this);
+
+      setTouchEventsEnabled(isPreview());
+      if (isPreview()) {
+        Toast.makeText(FusionWallpaperService.this, getString(R.string.hint_moveCountdown), Toast.LENGTH_LONG).show();
+      }
+    }
+
+    private void loadCountdownPosition() {
+      countdownPosX = preferences.getFloat("posX", .5f);
+      countdownPosY = preferences.getFloat("posY", .5f);
+    }
 
     @Override
     public void onDestroy() {
-      super.onDestroy();
       handler.removeCallbacks(drawCountdown);
+      if (preferences != null) {
+        preferences.unregisterOnSharedPreferenceChangeListener(this);
+      }
+      super.onDestroy();
     }
 
     @Override
@@ -92,13 +190,19 @@ public class FusionWallpaperService extends WallpaperService {
     public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
       super.onSurfaceChanged(holder, format, width, height);
 
-      final int centerX = width / 2;
-      final int centerY = height / 2;
-      final int halfIntrinsicWidth = countdownDrawable.getIntrinsicWidth() / 2;
-      final int halfIntrinsicHeight = countdownDrawable.getIntrinsicHeight() / 2;
-      countdownDrawable.setBounds(centerX - halfIntrinsicWidth, centerY - halfIntrinsicHeight, centerX + halfIntrinsicWidth, centerY + halfIntrinsicHeight);
+      surfaceWidth = width;
+      surfaceHeight = height;
+      updateCountdownBounds();
 
       drawEverything.run();
+    }
+
+    private void updateCountdownBounds() {
+      final int intrinsicWidth = countdownDrawable.getIntrinsicWidth();
+      final int intrinsicHeight = countdownDrawable.getIntrinsicHeight();
+      final int left = (int) ((surfaceWidth - intrinsicWidth) * countdownPosX);
+      final int top = (int) ((surfaceHeight - intrinsicHeight) * countdownPosY);
+      countdownDrawable.setBounds(left, top, left + intrinsicWidth, top + intrinsicHeight);
     }
 
     @Override
@@ -122,7 +226,6 @@ public class FusionWallpaperService extends WallpaperService {
     }
 
 
-
     void drawBackground(final Canvas c) {
       c.drawBitmap(backgroundBitmap, xPixels, yPixels, new Paint());
     }
@@ -135,6 +238,12 @@ public class FusionWallpaperService extends WallpaperService {
 
     void drawCountdown(Canvas c) {
       countdownDrawable.draw(c);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, final String key) {
+      loadCountdownPosition();
+      updateCountdownBounds();
     }
 
     abstract class DrawRunnable implements Runnable {
@@ -165,6 +274,10 @@ public class FusionWallpaperService extends WallpaperService {
       abstract void draw(final Canvas canvas);
     }
 
+  }
+
+  private SharedPreferences getSharedPreferences() {
+    return getSharedPreferences("countdownposition", Context.MODE_MULTI_PROCESS);
   }
 
   @Override
