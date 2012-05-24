@@ -28,13 +28,12 @@ public class FusionWallpaperService extends WallpaperService {
     private int  xPixels = 0;
     private int  yPixels = 0;
     private boolean fusionInFuture = true;
-    final private CountDownDrawable countDownDrawable;
+    final private CountDownDrawable countdownDrawable;
     private Bitmap backgroundBitmap;
 
     FusionEngine() {
-      countDownDrawable = new CountDownDrawable();
-      countDownDrawable.setColor(Color.WHITE);
-      countDownDrawable.setTypeface(Typeface.createFromAsset(getAssets(), "Anton.ttf"));
+      countdownDrawable = new CountDownDrawable(FusionWallpaperService.this);
+      countdownDrawable.setTypeface(Typeface.createFromAsset(getAssets(), "Anton.ttf"));
 
       final WallpaperManager wallpaperManager = WallpaperManager.getInstance(FusionWallpaperService.this);
       final int desiredMinimumHeight = wallpaperManager.getDesiredMinimumHeight();
@@ -50,7 +49,7 @@ public class FusionWallpaperService extends WallpaperService {
       backgroundDrawable.draw(canvas);
     }
 
-    Runnable drawEverything = new DrawRunnable() {
+    final Runnable drawEverything = new DrawRunnable() {
       @Override
       void draw(final Canvas canvas) {
         drawBackground(canvas);
@@ -58,10 +57,10 @@ public class FusionWallpaperService extends WallpaperService {
       }
     };
 
-    Runnable drawCountdown = new DrawRunnable() {
+    final Runnable drawCountdown = new DrawRunnable() {
       @Override
       void draw(final Canvas canvas) {
-        drawBackground(canvas); //TODO remove
+        drawBackground(canvas); // it is not save to rely on the wallpaper being properly prepared
         drawCountdown(canvas);
       }
     };
@@ -87,7 +86,11 @@ public class FusionWallpaperService extends WallpaperService {
     public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
       super.onSurfaceChanged(holder, format, width, height);
 
-      countDownDrawable.setBounds(0, 0, width - 1, height - 1);
+      final int centerX = width / 2;
+      final int centerY = height / 2;
+      final int halfIntrinsicWidth = countdownDrawable.getIntrinsicWidth() / 2;
+      final int halfIntrinsicHeight = countdownDrawable.getIntrinsicHeight() / 2;
+      countdownDrawable.setBounds(centerX - halfIntrinsicWidth, centerY - halfIntrinsicHeight, centerX + halfIntrinsicWidth, centerY + halfIntrinsicHeight);
 
       drawEverything.run();
     }
@@ -125,7 +128,7 @@ public class FusionWallpaperService extends WallpaperService {
     }
 
     void drawCountdown(Canvas c) {
-      countDownDrawable.draw(c);
+      countdownDrawable.draw(c);
     }
 
     abstract class DrawRunnable implements Runnable {
