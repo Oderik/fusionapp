@@ -5,7 +5,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.service.wallpaper.WallpaperService;
 import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.widget.TextView;
 
 public class MainActivity extends Activity implements SurfaceHolder.Callback {
@@ -24,7 +23,7 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 
     antonTypeface = Typeface.createFromAsset(getAssets(), "Anton.ttf");
 
-    ((TextView) findViewById(R.id.text)).setTypeface(antonTypeface);
+    ((TextView) findViewById(R.id.countdown)).setTypeface(antonTypeface);
 
     fusionWallpaperService = new FusionWallpaperService();
     fusionWallpaperService.onCreate();

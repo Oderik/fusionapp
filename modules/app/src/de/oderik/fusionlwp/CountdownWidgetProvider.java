@@ -34,7 +34,7 @@ public class CountdownWidgetProvider extends AppWidgetProvider {
     countDownDrawable.draw(canvas);
 
     final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.countdown_widget);
-    views.setImageViewBitmap(R.id.text, bitmap);
+    views.setImageViewBitmap(R.id.countdown, bitmap);
 
     appWidgetManager.updateAppWidget(appWidgetIds, views);
   }
