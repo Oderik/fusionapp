@@ -3,7 +3,7 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
                     android:previewImage="@drawable/logo_mobile_content"
                     android:resizeMode="none"
-                    android:minWidth="320dp"
-                    android:minHeight="40dp"
+                    android:minWidth="@dimen/bannerWidth"
+                    android:minHeight="@dimen/bannerHeight"
                     android:initialLayout="@layout/banner_widget"
-                    android:updatePeriodMillis="0"/><!-- TODO find appropriate size for different devices -->
+                    android:updatePeriodMillis="0"/>

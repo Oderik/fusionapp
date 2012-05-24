@@ -1,6 +1,7 @@
 package de.oderik.fusionlwp;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.*;
 import android.graphics.drawable.Drawable;
 
@@ -10,17 +11,19 @@ import android.graphics.drawable.Drawable;
  * @author Oderik
  */
 public class CountDownDrawable extends Drawable {
-
-  public static final int DEFAULT_TEXT_SIZE = 25;
   public static final int DEFAULT_TEXT_COLOR = Color.BLACK;
 
   private final Paint paint;
   private final Drawable backgroundDrawable;
-  private static final int INTRINSIC_WIDTH = 300;
-  private static final int INTRINSIC_HEIGHT = 100;
+  private int intrinsicWidth;
+  private int intrinsicHeight;
 
   public CountDownDrawable(final Context context) {
-    backgroundDrawable = context.getResources().getDrawable(R.drawable.countdown_panel);
+    Resources resources = context.getResources();
+    intrinsicWidth = resources.getDimensionPixelOffset(R.dimen.countdownWidth);
+    intrinsicHeight = resources.getDimensionPixelOffset(R.dimen.countdownHeight);
+
+    backgroundDrawable = resources.getDrawable(R.drawable.countdown_panel);
 
     paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     final Paint paint = this.paint;
@@ -28,7 +31,8 @@ public class CountDownDrawable extends Drawable {
     paint.setAntiAlias(true);
     paint.setStyle(Paint.Style.FILL);
     paint.setTextAlign(Paint.Align.CENTER);
-    paint.setTextSize(DEFAULT_TEXT_SIZE);
+
+    paint.setTextSize(resources.getDimension(R.dimen.countdownTextSize));
   }
 
   public void setTypeface(final Typeface typeface) {
@@ -95,12 +99,12 @@ public class CountDownDrawable extends Drawable {
 
   @Override
   public int getIntrinsicWidth() {
-    return INTRINSIC_WIDTH;
+    return intrinsicWidth;
   }
 
   @Override
   public int getIntrinsicHeight() {
-    return INTRINSIC_HEIGHT;
+    return intrinsicHeight;
   }
 
   @Override
