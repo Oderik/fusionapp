@@ -16,11 +16,9 @@ public class CountDownDrawable extends Drawable {
   public CountDownDrawable() {
     paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     final Paint paint = this.paint;
-    paint.setColor(Color.BLACK);
+    paint.setColor(Color.WHITE);
     paint.setAntiAlias(true);
-    paint.setStrokeWidth(2);
-    paint.setStrokeCap(Paint.Cap.ROUND);
-    paint.setStyle(Paint.Style.STROKE);
+    paint.setStyle(Paint.Style.FILL);
     paint.setTextAlign(Paint.Align.CENTER);
     paint.setTextSize(20);
   }
@@ -46,7 +44,7 @@ public class CountDownDrawable extends Drawable {
     canvas.save();
     canvas.translate(centerX, centerY);
 
-    final int timeLeft = getLevel();
+    final long timeLeft = FusionEventTiming.timeToFusion();
 
     final String time;
     if (timeLeft > 0) {

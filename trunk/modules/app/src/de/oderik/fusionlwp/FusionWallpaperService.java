@@ -1,7 +1,7 @@
 package de.oderik.fusionlwp;
 
-import android.graphics.Canvas;
-import android.graphics.Rect;
+import android.app.WallpaperManager;
+import android.graphics.*;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
@@ -13,6 +13,8 @@ import android.view.SurfaceHolder;
  * @since 15.05.12 16:19
  */
 public class FusionWallpaperService extends WallpaperService {
+  public static final String TAG = FusionWallpaperService.class.getName();
+
   private final Handler handler = new Handler();
 
   @Override
@@ -23,16 +25,29 @@ public class FusionWallpaperService extends WallpaperService {
   class FusionEngine extends Engine {
 
     private boolean visible;
-    private Rect bounds  = new Rect(0, 0, 1, 1);
     private int  xPixels = 0;
     private int  yPixels = 0;
-    private Drawable background;
     private boolean fusionInFuture = true;
     final private CountDownDrawable countDownDrawable;
+    private Bitmap backgroundBitmap;
 
     FusionEngine() {
       countDownDrawable = new CountDownDrawable();
-      //todo setbounds und so
+      countDownDrawable.setColor(Color.WHITE);
+      countDownDrawable.setTypeface(Typeface.createFromAsset(getAssets(), "Anton.ttf"));
+
+      final WallpaperManager wallpaperManager = WallpaperManager.getInstance(FusionWallpaperService.this);
+      final int desiredMinimumHeight = wallpaperManager.getDesiredMinimumHeight();
+      final int desiredMinimumWidth = wallpaperManager.getDesiredMinimumWidth();
+      updateBackgroundBitmap(desiredMinimumWidth, desiredMinimumHeight);
+    }
+
+    private void updateBackgroundBitmap(final int width, final int height) {
+      final Drawable backgroundDrawable = getResources().getDrawable(R.drawable.background);
+      backgroundDrawable.setBounds(0, 0, width - 1, height - 1);
+      backgroundBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+      final Canvas canvas = new Canvas(backgroundBitmap);
+      backgroundDrawable.draw(canvas);
     }
 
     Runnable drawEverything = new DrawRunnable() {
@@ -71,10 +86,8 @@ public class FusionWallpaperService extends WallpaperService {
     @Override
     public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
       super.onSurfaceChanged(holder, format, width, height);
-      // store the center of the surface, so we can draw the cube in the right spot
 
-      bounds.right = width;
-      bounds.bottom = height;
+      countDownDrawable.setBounds(0, 0, width - 1, height - 1);
 
       drawEverything.run();
     }
@@ -102,23 +115,18 @@ public class FusionWallpaperService extends WallpaperService {
 
 
     void drawBackground(final Canvas c) {
-      this.background = getResources().getDrawable(R.drawable.background);
-      this.background.setBounds(xPixels, yPixels, getWallpaperDesiredMinimumWidth() + xPixels, getWallpaperDesiredMinimumHeight() + yPixels);
-
-      this.background.draw(c);
+      c.drawBitmap(backgroundBitmap, xPixels, yPixels, new Paint());
     }
 
     @Override
     public void onDesiredSizeChanged(final int desiredWidth, final int desiredHeight) {
       super.onDesiredSizeChanged(desiredWidth, desiredHeight);
-      Log.d("Fusionsize", String.format("width=%d height=%d", desiredWidth, desiredHeight));
+      updateBackgroundBitmap(desiredWidth, desiredHeight);
     }
 
     void drawCountdown(Canvas c) {
       countDownDrawable.draw(c);
     }
-
-
 
     abstract class DrawRunnable implements Runnable {
       @Override
@@ -144,5 +152,11 @@ public class FusionWallpaperService extends WallpaperService {
       abstract void draw(final Canvas canvas);
     }
 
+  }
+
+  @Override
+  public void onLowMemory() {
+    super.onLowMemory();
+    Log.w(TAG, "memory low");
   }
 }

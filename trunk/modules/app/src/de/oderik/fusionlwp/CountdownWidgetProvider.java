@@ -29,7 +29,6 @@ public class CountdownWidgetProvider extends AppWidgetProvider {
     final Typeface antonTypeface = Typeface.createFromAsset(context.getAssets(), "Anton.ttf");
     countDownDrawable.setTypeface(antonTypeface);
     countDownDrawable.setBounds(0, 0, 299, 79);
-    countDownDrawable.setLevel((int) FusionEventTiming.timeToFusion());
     final Bitmap bitmap = Bitmap.createBitmap(300, 80, Bitmap.Config.ARGB_8888);
     final Canvas canvas = new Canvas(bitmap);
     countDownDrawable.draw(canvas);
