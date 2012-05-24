@@ -1,5 +1,6 @@
 package de.oderik.fusionlwp;
 
+import android.content.Context;
 import android.graphics.*;
 import android.graphics.drawable.Drawable;
 
@@ -10,17 +11,24 @@ import android.graphics.drawable.Drawable;
  */
 public class CountDownDrawable extends Drawable {
   private static final String SAMPLE = "00:00:00:00";
+  public static final int DEFAULT_TEXT_SIZE = 20;
+  public static final int DEFAULT_TEXT_COLOR = Color.BLACK;
 
   private final Paint paint;
+  private final Drawable backgroundDrawable;
+  private static final int INTRINSIC_WIDTH = 300;
+  private static final int INTRINSIC_HEIGHT = 100;
 
-  public CountDownDrawable() {
+  public CountDownDrawable(final Context context) {
+    backgroundDrawable = context.getResources().getDrawable(R.drawable.countdown_panel);
+
     paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     final Paint paint = this.paint;
-    paint.setColor(Color.WHITE);
+    paint.setColor(DEFAULT_TEXT_COLOR);
     paint.setAntiAlias(true);
     paint.setStyle(Paint.Style.FILL);
     paint.setTextAlign(Paint.Align.CENTER);
-    paint.setTextSize(20);
+    paint.setTextSize(DEFAULT_TEXT_SIZE);
   }
 
   public void setTypeface(final Typeface typeface) {
@@ -37,12 +45,21 @@ public class CountDownDrawable extends Drawable {
 
   @Override
   public void draw(final Canvas canvas) {
-    final Rect bounds = getBounds();
-    final float centerX = (bounds.right - bounds.left) / 2;
-    final float centerY = (bounds.bottom - bounds.top) / 2;
+    drawBackground(canvas);
+    drawCountdown(canvas);
+  }
 
+  private void drawBackground(final Canvas canvas) {
     canvas.save();
-    canvas.translate(centerX, centerY);
+    backgroundDrawable.setBounds(getBounds());
+    backgroundDrawable.draw(canvas);
+    canvas.restore();
+  }
+
+  private void drawCountdown(final Canvas canvas) {
+    final Rect bounds = getBounds();
+    final float centerX = (bounds.right - bounds.left) / 2 + bounds.left;
+    final float centerY = (bounds.bottom - bounds.top) / 2 + bounds.top;
 
     final long timeLeft = FusionEventTiming.timeToFusion();
 
@@ -52,8 +69,7 @@ public class CountDownDrawable extends Drawable {
     } else {
       time = "Takeoff!";
     }
-    canvas.drawText(time, 0, 0, paint);
-    canvas.restore();
+    canvas.drawText(time, centerX, centerY, paint);
   }
 
   @Override
@@ -67,5 +83,25 @@ public class CountDownDrawable extends Drawable {
   @Override
   public int getOpacity() {
     return PixelFormat.TRANSLUCENT;
+  }
+
+  @Override
+  public int getIntrinsicWidth() {
+    return INTRINSIC_WIDTH;
+  }
+
+  @Override
+  public int getIntrinsicHeight() {
+    return INTRINSIC_HEIGHT;
+  }
+
+  @Override
+  public int getMinimumWidth() {
+    return getIntrinsicWidth();
+  }
+
+  @Override
+  public int getMinimumHeight() {
+    return getIntrinsicHeight();
   }
 }

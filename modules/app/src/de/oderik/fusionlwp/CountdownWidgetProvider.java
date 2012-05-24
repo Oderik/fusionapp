@@ -18,8 +18,6 @@ import android.widget.RemoteViews;
 public class CountdownWidgetProvider extends AppWidgetProvider {
   private static final String TAG = CountdownWidgetProvider.class.getName();
 
-  final CountDownDrawable countDownDrawable = new CountDownDrawable();
-
   @Override
   public void onUpdate(final Context context, final AppWidgetManager appWidgetManager, final int[] appWidgetIds) {
     if (BuildConfig.DEBUG) {
@@ -27,6 +25,7 @@ public class CountdownWidgetProvider extends AppWidgetProvider {
     }
     super.onUpdate(context, appWidgetManager, appWidgetIds);
     final Typeface antonTypeface = Typeface.createFromAsset(context.getAssets(), "Anton.ttf");
+    final CountDownDrawable countDownDrawable = new CountDownDrawable(context);
     countDownDrawable.setTypeface(antonTypeface);
     countDownDrawable.setBounds(0, 0, 299, 79);
     final Bitmap bitmap = Bitmap.createBitmap(300, 80, Bitmap.Config.ARGB_8888);
