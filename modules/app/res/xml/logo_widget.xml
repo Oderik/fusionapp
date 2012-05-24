@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:previewImage="@drawable/sidebar_logo"
+                    android:resizeMode="none"
+                    android:minWidth="140dp"
+                    android:minHeight="120dp"
+                    android:initialLayout="@layout/logo_widget"
+                    android:updatePeriodMillis="0"/><!-- TODO find appropriate size for different devices -->
