@@ -230,8 +230,8 @@ public class FusionWallpaperService extends WallpaperService {
     }
 
 
-    void drawBackground(final Canvas c) {
-      c.drawBitmap(backgroundBitmap, xPixels, yPixels, new Paint());
+    void drawBackground(final Canvas canvas) {
+      canvas.drawBitmap(backgroundBitmap, xPixels, yPixels, new Paint());
     }
 
     @Override
@@ -267,6 +267,8 @@ public class FusionWallpaperService extends WallpaperService {
           if (canvas != null) {
             draw(canvas);
           }
+        } catch (NullPointerException ignored) {
+          ignored.printStackTrace();
         } finally {
           if (canvas != null) holder.unlockCanvasAndPost(canvas);
         }
