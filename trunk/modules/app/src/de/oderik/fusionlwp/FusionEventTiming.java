@@ -21,6 +21,11 @@ public class FusionEventTiming {
     FUSION_CALENDAR.set(Calendar.MINUTE, 0);
   }
 
+  public final static long SECOND = 1000;
+  public final static long MINUTE = 60 * SECOND;
+  public final static long HOUR   = 60 * MINUTE;
+  public final static long DAY    = 24 * HOUR;
+
   public static long timeToFusion() {
     final Calendar now = Calendar.getInstance();
     return FUSION_CALENDAR.getTimeInMillis() - now.getTimeInMillis();
@@ -28,13 +33,12 @@ public class FusionEventTiming {
 
 
   public static long timeToNextSecond() {
-    return 1000 - (System.currentTimeMillis() % 1000);
+    return SECOND - (System.currentTimeMillis() % SECOND);
   }
 
-  private final static long SECOND = 1000;
-  private final static long MINUTE = 60 * SECOND;
-  private final static long HOUR   = 60 * MINUTE;
-  private final static long DAY    = 24 * HOUR;
+  public static long nextSecond() {
+    return (System.currentTimeMillis() / SECOND + 1) * SECOND;
+  }
 
   public static String format(final long time) {
     final long days = time / DAY;
@@ -44,5 +48,4 @@ public class FusionEventTiming {
 
     return String.format("%02dd %02dh %02dm %02ds", days, hours, minutes, seconds);
   }
-
 }

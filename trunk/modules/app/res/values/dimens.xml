@@ -2,8 +2,8 @@
   <dimen name="horizontalWidgetPadding">6dp</dimen>
   <dimen name="verticalWidgetPadding">2dp</dimen>
 
-  <dimen name="countdownTextSize">16dp</dimen>
-  <dimen name="countdownWidth">180dp</dimen>
+  <dimen name="countdownTextSize">14dp</dimen>
+  <dimen name="countdownWidth">132dp</dimen>
   <dimen name="countdownHeight">61dp</dimen>
 
   <dimen name="bannerWidth">264dp</dimen><!-- must be larger than 260dp to take up 4 slots on HTC Jetstream -->
