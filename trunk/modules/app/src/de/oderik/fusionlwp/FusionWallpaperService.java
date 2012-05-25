@@ -124,11 +124,13 @@ public class FusionWallpaperService extends WallpaperService {
     }
 
     private void updateBackgroundBitmap(final int width, final int height) {
-      final Drawable backgroundDrawable = getResources().getDrawable(R.drawable.background);
-      backgroundDrawable.setBounds(0, 0, width - 1, height - 1);
-      backgroundBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-      final Canvas canvas = new Canvas(backgroundBitmap);
-      backgroundDrawable.draw(canvas);
+      if (width > 0 && height > 0) {
+        final Drawable backgroundDrawable = getResources().getDrawable(R.drawable.background);
+        backgroundDrawable.setBounds(0, 0, width - 1, height - 1);
+        backgroundBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(backgroundBitmap);
+        backgroundDrawable.draw(canvas);
+      }
     }
 
     final Runnable drawEverything = new DrawRunnable() {
