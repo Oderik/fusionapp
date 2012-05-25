@@ -7,7 +7,7 @@
             android:targetSdkVersion="14"/>
   <application android:label="@string/app_name"
                android:icon="@drawable/icon">
-    <service android:label="Fusion Countdown"
+    <service android:label="Wallpaper"
              android:name=".FusionWallpaperService"
              android:permission="android.permission.BIND_WALLPAPER">
       <intent-filter>
@@ -16,8 +16,8 @@
       <meta-data android:name="android.service.wallpaper"
                  android:resource="@xml/fusion"/>
     </service>
-    <service android:name=".CountdownWidgetService" android:label="Fusion Countdown Widget"/>
-    <!--
+    <service android:name=".CountdownWidgetService"
+             android:label="Countdown Widget"/>
     <receiver android:name=".CountdownWidgetProvider"
               android:label="@string/label_countdownWidget">
       <intent-filter>
@@ -26,7 +26,6 @@
       <meta-data android:name="android.appwidget.provider"
                  android:resource="@xml/countdown_widget"/>
     </receiver>
-    -->
     <receiver android:name=".LogoWidgetProvider"
               android:label="@string/label_logoWidget">
       <intent-filter>
@@ -43,5 +42,11 @@
       <meta-data android:name="android.appwidget.provider"
                  android:resource="@xml/banner_widget"/>
     </receiver>
+    <activity android:name=".AlarmTesterActivity">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
+        <category android:name="android.intent.category.LAUNCHER"/>
+      </intent-filter>
+    </activity>
   </application>
 </manifest> 
