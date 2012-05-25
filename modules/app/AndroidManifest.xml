@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="de.oderik.fusionlwp"
-          android:versionCode="2"
-          android:versionName="1.0">
+          android:versionCode="3"
+          android:versionName="1.1">
   <uses-sdk android:minSdkVersion="7"
             android:targetSdkVersion="14"/>
   <application android:label="@string/app_name"
                android:icon="@drawable/icon">
-    <service android:label="Wallpaper"
+
+    <service android:label="@string/label_wallpaper"
              android:name=".FusionWallpaperService"
              android:permission="android.permission.BIND_WALLPAPER">
       <intent-filter>
         <action android:name="android.service.wallpaper.WallpaperService"/>
       </intent-filter>
       <meta-data android:name="android.service.wallpaper"
-                 android:resource="@xml/fusion"/>
+                 android:resource="@xml/fusion_wallpaper"/>
     </service>
+
     <service android:name=".CountdownWidgetService"
              android:label="Countdown Widget"/>
     <receiver android:name=".CountdownWidgetProvider"
@@ -42,10 +44,14 @@
       <meta-data android:name="android.appwidget.provider"
                  android:resource="@xml/banner_widget"/>
     </receiver>
-    <activity android:name=".AlarmTesterActivity">
+    <activity android:name=".WallpaperSettingsActivity"
+              android:exported="true"/>
+    <activity android:name=".ChooseWallpaperForwarderActivity"
+            android:exported="true"
+            android:noHistory="true">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
-        <category android:name="android.intent.category.LAUNCHER"/>
+        <category android:name="android.intent.category.INFO"/>
       </intent-filter>
     </activity>
   </application>
