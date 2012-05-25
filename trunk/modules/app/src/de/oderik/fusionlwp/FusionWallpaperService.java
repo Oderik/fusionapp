@@ -19,6 +19,12 @@ import android.widget.Toast;
 public class FusionWallpaperService extends WallpaperService {
   public static final String TAG = FusionWallpaperService.class.getName();
 
+  public static final String PREFERENCE_POS_X = "posX";
+  public static final String PREFERENCE_POS_Y = "posY";
+  public static final String PREFERENCE_ENABLED = "enabled";
+
+  public static final String SHARED_PREFERENCES_NAME = "countdownposition";
+
   private final Handler handler = new Handler();
 
   @Override
@@ -36,15 +42,14 @@ public class FusionWallpaperService extends WallpaperService {
 
     private float countdownPosX;
     private float countdownPosY;
+    private boolean countdownEnabled;
+
     private boolean fusionInFuture = true;
 
     private SharedPreferences preferences;
     final private CountdownDrawable countdownDrawable;
     private Bitmap backgroundBitmap;
 
-    private boolean drag = false;
-    private float initialDragX;
-    private float initialDragY;
     private float initialPosX;
     private float initialPosY;
     private Matrix matrix = null;
@@ -69,10 +74,7 @@ public class FusionWallpaperService extends WallpaperService {
         switch (event.getAction()) {
           case MotionEvent.ACTION_DOWN:
             final Rect countdownBounds = countdownDrawable.getBounds();
-            if (countdownBounds.contains((int) event.getX(), (int) event.getY())) {
-              drag = true;
-              initialDragX = event.getX();
-              initialDragY = event.getY();
+            if (countdownEnabled && countdownBounds.contains((int) event.getX(), (int) event.getY())) {
               initialPosX = countdownPosX;
               initialPosY = countdownPosY;
 
@@ -87,7 +89,7 @@ public class FusionWallpaperService extends WallpaperService {
             }
             break;
           case MotionEvent.ACTION_MOVE:
-            if (drag) {
+            if (matrix != null) {
               points[0] = event.getX();
               points[1] = event.getY();
               matrix.mapPoints(points);
@@ -98,12 +100,12 @@ public class FusionWallpaperService extends WallpaperService {
             }
             break;
           case MotionEvent.ACTION_UP:
-            drag = false;
-            savePosition();
+            matrix = null;
+            savePreferences();
             break;
           default:
-            if (drag) {
-              drag = false;
+            if (matrix != null) {
+              matrix = null;
               countdownPosX = initialPosX;
               countdownPosY = initialPosY;
               drawEverything.run();
@@ -113,12 +115,11 @@ public class FusionWallpaperService extends WallpaperService {
       }
     }
 
-
-    private void savePosition() {
-      final SharedPreferences preferences = getSharedPreferences();
+    private void savePreferences() {
       SharedPreferences.Editor editor = preferences.edit();
-      editor.putFloat("posX", countdownPosX);
-      editor.putFloat("posY", countdownPosY);
+      editor.putFloat(PREFERENCE_POS_X, countdownPosX);
+      editor.putFloat(PREFERENCE_POS_Y, countdownPosY);
+      editor.putBoolean(PREFERENCE_ENABLED, countdownEnabled);
       editor.apply();
     }
 
@@ -149,19 +150,20 @@ public class FusionWallpaperService extends WallpaperService {
     @Override
     public void onCreate(final SurfaceHolder surfaceHolder) {
       super.onCreate(surfaceHolder);
-      preferences = getSharedPreferences();
-      loadCountdownPosition();
+      preferences = getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_MULTI_PROCESS);
+      loadPreferences();
       preferences.registerOnSharedPreferenceChangeListener(this);
 
       setTouchEventsEnabled(isPreview());
-      if (isPreview()) {
+      if (isPreview() && countdownEnabled) {
         Toast.makeText(FusionWallpaperService.this, getString(R.string.hint_moveCountdown), Toast.LENGTH_LONG).show();
       }
     }
 
-    private void loadCountdownPosition() {
-      countdownPosX = preferences.getFloat("posX", .5f);
-      countdownPosY = preferences.getFloat("posY", .5f);
+    private void loadPreferences() {
+      countdownPosX = preferences.getFloat(PREFERENCE_POS_X, .5f);
+      countdownPosY = preferences.getFloat(PREFERENCE_POS_Y, .5f);
+      countdownEnabled = preferences.getBoolean(PREFERENCE_ENABLED, true);
     }
 
     @Override
@@ -237,12 +239,14 @@ public class FusionWallpaperService extends WallpaperService {
     }
 
     void drawCountdown(Canvas c) {
-      countdownDrawable.draw(c);
+      if (countdownEnabled) {
+        countdownDrawable.draw(c);
+      }
     }
 
     @Override
     public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, final String key) {
-      loadCountdownPosition();
+      loadPreferences();
       updateCountdownBounds();
     }
 
@@ -266,7 +270,7 @@ public class FusionWallpaperService extends WallpaperService {
         }
         // Reschedule the next redraw
         handler.removeCallbacks(drawCountdown);
-        if (visible && fusionInFuture) {
+        if (visible && fusionInFuture && countdownEnabled) {
           handler.postDelayed(drawCountdown, FusionEventTiming.timeToNextSecond());
         }
       }
@@ -274,10 +278,6 @@ public class FusionWallpaperService extends WallpaperService {
       abstract void draw(final Canvas canvas);
     }
 
-  }
-
-  private SharedPreferences getSharedPreferences() {
-    return getSharedPreferences("countdownposition", Context.MODE_MULTI_PROCESS);
   }
 
   @Override

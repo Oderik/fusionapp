@@ -2,5 +2,6 @@
 
 <wallpaper xmlns:android="http://schemas.android.com/apk/res/android"
         android:description="@string/lwp_description"
-        android:thumbnail="@drawable/sidebar_logo"
+        android:thumbnail="@drawable/background"
+        android:settingsActivity="de.oderik.fusionlwp.WallpaperSettingsActivity"
         />
