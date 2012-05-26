@@ -2,6 +2,7 @@ package de.oderik.fusionlwp;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 /**
  * Created: 16.05.12
@@ -13,11 +14,11 @@ public class FusionEventTiming {
 
   static {
     FUSION_CALENDAR.clear();
-    //TODO timezone
+    FUSION_CALENDAR.setTimeZone(TimeZone.getTimeZone("UTC"));
     FUSION_CALENDAR.set(Calendar.YEAR, 2012);
     FUSION_CALENDAR.set(Calendar.MONTH, Calendar.JUNE);
     FUSION_CALENDAR.set(Calendar.DAY_OF_MONTH, 28);
-    FUSION_CALENDAR.set(Calendar.HOUR_OF_DAY, 18);
+    FUSION_CALENDAR.set(Calendar.HOUR_OF_DAY, 16);
     FUSION_CALENDAR.set(Calendar.MINUTE, 0);
   }
 
