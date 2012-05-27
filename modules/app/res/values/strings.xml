@@ -11,4 +11,11 @@
   <string name="preferenceScreenTitle_wallpaper">Fusion wallpaper preferences</string>
   <string name="preferenceTitle_countdown">Countdown</string>
   <string name="preferenceSummary_countdown">Show the countdown on the wallpaper?\nBy the way, you can drag it around!</string>
+  <string name="welcome">&lt;p&gt;Thank you for installing the Fusion Festival countdown.
+    This app contains a live wallpaper and widgets for your homescreen.&lt;/p&gt;
+    &lt;p&gt;You can now choose the wallpaper from your installed live wallpapers.&lt;/p&gt;
+    &lt;p&gt;You can &lt;u&gt;add a widget to your homescreen&lt;/u&gt; by longpressing free space of your homescreen.
+    A menu will appear allowing you to install one of your widgets.&lt;/p&gt;
+    &lt;p&gt;Have fun!&lt;/p&gt;</string>
+  <string name="button_lwpChooser">Live wallpapers</string>
 </resources>

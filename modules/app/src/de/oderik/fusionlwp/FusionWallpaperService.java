@@ -120,7 +120,7 @@ public class FusionWallpaperService extends WallpaperService {
       editor.putFloat(PREFERENCE_POS_X, countdownPosX);
       editor.putFloat(PREFERENCE_POS_Y, countdownPosY);
       editor.putBoolean(PREFERENCE_ENABLED, countdownEnabled);
-      editor.apply();
+      editor.commit();
     }
 
     private void updateBackgroundBitmap(final int width, final int height) {
