@@ -11,6 +11,9 @@ import java.util.TimeZone;
 public class FusionEventTiming {
 
   private static FusionEventTiming INSTANCE = new FusionEventTiming();
+  private long now;
+  private long nextFusionStart;
+  private long nextFusionEnd;
 
   public static FusionEventTiming get() {
     return INSTANCE;
@@ -21,7 +24,7 @@ public class FusionEventTiming {
   public final static long HOUR   = 60 * MINUTE;
   public final static long DAY    = 24 * HOUR;
 
-  public enum Phase {
+  public static enum Phase {
     BEFORE (SECOND),
     DURING (MINUTE);
 
@@ -41,6 +44,20 @@ public class FusionEventTiming {
   private Phase phase = Phase.BEFORE;
 
   private FusionEventTiming() {
+    update();
+  }
+
+  public boolean update() {
+    now = System.currentTimeMillis();
+    updateNextFusionStart();
+    updateNextFusionEnd();
+    final boolean isBefore = nextFusionStart < nextFusionEnd;
+    if (isBefore == (phase == Phase.BEFORE)) {
+      return false;
+    } else {
+      phase = isBefore ? Phase.BEFORE : Phase.DURING;
+      return true;
+    }
   }
 
   public long timeToNextSecond() {
@@ -78,20 +95,22 @@ public class FusionEventTiming {
     }
   }
 
-  private long nextFusionStart() {
+  private void updateNextFusionStart() {
     final Calendar calendar = getFusionCalendar();
     ensureInFuture(calendar);
-    return calendar.getTimeInMillis();
+    nextFusionStart = calendar.getTimeInMillis();
   }
 
-  private long nextFusionEnd() {
+  private void updateNextFusionEnd() {
     final Calendar calendar = getFusionCalendar();
     calendar.roll(Calendar.DAY_OF_YEAR, 5);
     ensureInFuture(calendar);
-    return calendar.getTimeInMillis();
+    nextFusionEnd = calendar.getTimeInMillis();
   }
 
-  private Phase getCurrentPhase() {
-    return nextFusionStart() < nextFusionEnd() ? Phase.BEFORE : Phase.DURING;
+  public Phase getPhase() {
+    return phase;
   }
+
+
 }
