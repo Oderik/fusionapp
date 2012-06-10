@@ -21,10 +21,6 @@ public class FusionEventTiming {
   public final static long DAY    = 24 * HOUR;
   private Calendar calendar;
 
-  public String getCountdownString() {
-    return format(nextFusionStart - now);
-  }
-
   private static String[] TIMETABLE_DAY_OF_WEEK_NAMES_SHORT = {"EI", "SO", "MO", "DI", "MI", "DO", "FR", "SA"};
   private static String[] TIMETABLE_DAY_OF_WEEK_NAMES = {"KAPUTT", "SONNTAG", "MONTAG", "DIENSTAG", "MITTWOCH", "DONNERSTAG", "FREITAG", "SONNABEND"};
 
@@ -54,15 +50,6 @@ public class FusionEventTiming {
   public long nextTick() {
     final long interval = getInterval();
     return (System.currentTimeMillis() / interval + 1) * interval;
-  }
-
-  public static String format(final long time) {
-    final long days = time / DAY;
-    final long hours = time % DAY / HOUR;
-    final long minutes = time % HOUR / MINUTE;
-    final long seconds = time % MINUTE / SECOND;
-
-    return String.format("%02dd %02dh %02dm %02ds", days, hours, minutes, seconds);
   }
 
   private Calendar getFusionCalendar() {
@@ -102,5 +89,35 @@ public class FusionEventTiming {
 
   public boolean isDuring() {
     return during;
+  }
+
+  public String getFestivalDayString() {
+    calendar.setTimeZone(TimeZone.getTimeZone("Europe/Berlin"));
+    calendar.setTimeInMillis(now);
+
+    return TIMETABLE_DAY_OF_WEEK_NAMES[calendar.get(Calendar.DAY_OF_WEEK)];
+  }
+
+  public String getFestivalHourString() {
+    calendar.setTimeZone(TimeZone.getTimeZone("Europe/Berlin"));
+    calendar.setTimeInMillis(now);
+
+    return String.format("%02d", calendar.get(Calendar.HOUR_OF_DAY));
+  }
+
+  public String getCountdownString() {
+    final long days = (nextFusionStart - now) / DAY;
+    final long hours = (nextFusionStart - now) % DAY / HOUR;
+    final long minutes = (nextFusionStart - now) % HOUR / MINUTE;
+    final long seconds = (nextFusionStart - now) % MINUTE / SECOND;
+
+    return String.format("%02dd %02dh %02dm %02ds", days, hours, minutes, seconds);
+  }
+
+  public float getHourFraction() {
+    calendar.setTimeZone(TimeZone.getTimeZone("Europe/Berlin"));
+    calendar.setTimeInMillis(now);
+
+    return calendar.get(Calendar.MINUTE) / 60f;
   }
 }

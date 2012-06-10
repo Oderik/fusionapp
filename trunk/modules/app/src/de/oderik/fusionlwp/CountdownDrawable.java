@@ -12,13 +12,16 @@ import android.graphics.drawable.Drawable;
  */
 public class CountdownDrawable extends Drawable {
   public static final int DEFAULT_TEXT_COLOR = Color.BLACK;
+  public static final int SPACE              = 5;
 
-  private final Paint    paint;
+  private final Paint    textPaint;
   private final Drawable backgroundDrawable;
   private       int      intrinsicWidth;
   private       int      intrinsicHeight;
 
   private final FusionEventTiming fusionEventTiming;
+  private final Paint             boxPaint;
+  private       float             boxSize;
 
   public CountdownDrawable(final Context context, final FusionEventTiming fusionEventTiming) {
     this.fusionEventTiming = fusionEventTiming;
@@ -28,26 +31,34 @@ public class CountdownDrawable extends Drawable {
 
     backgroundDrawable = resources.getDrawable(R.drawable.countdown_panel);
 
-    paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    final Paint paint = this.paint;
-    paint.setColor(DEFAULT_TEXT_COLOR);
-    paint.setAntiAlias(true);
-    paint.setStyle(Paint.Style.FILL);
-    paint.setTextAlign(Paint.Align.CENTER);
+    textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    textPaint.setColor(DEFAULT_TEXT_COLOR);
+    textPaint.setStyle(Paint.Style.FILL);
 
-    paint.setTextSize(resources.getDimension(R.dimen.countdownTextSize));
+    textPaint.setTextSize(resources.getDimension(R.dimen.countdownTextSize));
+
+    boxPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    boxPaint.setColor(DEFAULT_TEXT_COLOR);
+    boxPaint.setStyle(Paint.Style.STROKE);
+
+    updateBoxSize();
+  }
+
+  private void updateBoxSize() {
+    boxSize = 2 * -textPaint.ascent();
   }
 
   public void setTypeface(final Typeface typeface) {
-    paint.setTypeface(typeface);
+    textPaint.setTypeface(typeface);
+    updateBoxSize();
   }
 
   public void setTextSize(final float textSize) {
-    paint.setTextSize(textSize);
+    textPaint.setTextSize(textSize);
   }
 
   public void setColor(final int color) {
-    paint.setColor(color);
+    textPaint.setColor(color);
   }
 
   @Override
@@ -72,15 +83,35 @@ public class CountdownDrawable extends Drawable {
     if (bounds.height() < 1) {
       bounds.bottom = bounds.top + getMinimumHeight();
     }
-    final float xOffset = bounds.exactCenterX();
-    final float yOffset = bounds.exactCenterY() - paint.ascent() / 2;
 
 
     if (fusionEventTiming.isDuring()) {
-      //TODO
+      final String festivalDay = fusionEventTiming.getFestivalDayString();
+      final String festivalHour = fusionEventTiming.getFestivalHourString();
+      textPaint.setTextAlign(Paint.Align.RIGHT);
+      final float boxMargin = (bounds.height() - boxSize) / 2;
+      final float horizontalTextAnchor = bounds.right - boxSize - boxMargin - SPACE;
+
+      canvas.drawText(festivalDay, horizontalTextAnchor, bounds.exactCenterY() - (textPaint.descent() / 2), textPaint);
+      canvas.drawText(festivalHour, horizontalTextAnchor, bounds.exactCenterY() - textPaint.ascent() - (textPaint.descent() / 2), textPaint);
+
+      canvas.drawRect(bounds.right - boxMargin - boxSize,
+                      bounds.top + boxMargin,
+                      bounds.right - boxMargin,
+                      bounds.bottom - boxMargin,
+                      boxPaint);
+      final float hourFraction = fusionEventTiming.getHourFraction();
+      if (hourFraction != 0) {
+        canvas.drawRect(bounds.right - boxMargin - boxSize + 1,
+                        bounds.top + boxMargin + 1,
+                        bounds.right - boxMargin - ((boxSize - 2) * (1 - hourFraction)) - 1,
+                        bounds.bottom - boxMargin - 1,
+                        textPaint);
+      }
     } else {
-      final String time = fusionEventTiming.getCountdownString();
-      canvas.drawText(time, xOffset, yOffset, paint);
+      final String countdown = fusionEventTiming.getCountdownString();
+      textPaint.setTextAlign(Paint.Align.CENTER);
+      canvas.drawText(countdown, bounds.exactCenterX(), bounds.exactCenterY() - (textPaint.ascent() + textPaint.descent())/ 2, textPaint);
     }
 
   }
