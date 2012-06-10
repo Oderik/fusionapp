@@ -13,12 +13,15 @@ import android.graphics.drawable.Drawable;
 public class CountdownDrawable extends Drawable {
   public static final int DEFAULT_TEXT_COLOR = Color.BLACK;
 
-  private final Paint paint;
+  private final Paint    paint;
   private final Drawable backgroundDrawable;
-  private int intrinsicWidth;
-  private int intrinsicHeight;
+  private       int      intrinsicWidth;
+  private       int      intrinsicHeight;
 
-  public CountdownDrawable(final Context context) {
+  private final FusionEventTiming fusionEventTiming;
+
+  public CountdownDrawable(final Context context, final FusionEventTiming fusionEventTiming) {
+    this.fusionEventTiming = fusionEventTiming;
     Resources resources = context.getResources();
     intrinsicWidth = resources.getDimensionPixelOffset(R.dimen.countdownWidth);
     intrinsicHeight = resources.getDimensionPixelOffset(R.dimen.countdownHeight);
@@ -54,7 +57,6 @@ public class CountdownDrawable extends Drawable {
   }
 
 
-
   private void drawBackground(final Canvas canvas) {
     canvas.save();
     backgroundDrawable.setBounds(getBounds());
@@ -70,18 +72,17 @@ public class CountdownDrawable extends Drawable {
     if (bounds.height() < 1) {
       bounds.bottom = bounds.top + getMinimumHeight();
     }
-    final float xOffset = bounds.left + (bounds.width()) / 2;
-    final float yOffset = bounds.top + (bounds.height() - paint.ascent()) / 2;
+    final float xOffset = bounds.exactCenterX();
+    final float yOffset = bounds.exactCenterY() - paint.ascent() / 2;
 
-    final long timeLeft = FusionEventTiming.timeToFusion();
 
-    final String time;
-    if (timeLeft > 0) {
-      time = FusionEventTiming.format(timeLeft);
+    if (fusionEventTiming.isDuring()) {
+      //TODO
     } else {
-      time = "Takeoff!";
+      final String time = fusionEventTiming.getCountdownString();
+      canvas.drawText(time, xOffset, yOffset, paint);
     }
-    canvas.drawText(time, xOffset, yOffset, paint);
+
   }
 
   @Override
