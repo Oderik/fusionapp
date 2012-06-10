@@ -45,8 +45,6 @@ public class FusionWallpaperService extends WallpaperService {
     private float   countdownPosY;
     private boolean countdownEnabled;
 
-    private boolean fusionInFuture = true;
-
     private       SharedPreferences preferences;
     final private CountdownDrawable countdownDrawable;
     private       Bitmap            backgroundBitmap;
@@ -276,7 +274,7 @@ public class FusionWallpaperService extends WallpaperService {
         }
         // Reschedule the next redraw
         handler.removeCallbacks(drawCountdown);
-        if (visible && fusionInFuture && countdownEnabled) {
+        if (visible && countdownEnabled) {
           handler.postDelayed(drawCountdown, fusionEventTiming.timeToNextTick());
         }
       }
