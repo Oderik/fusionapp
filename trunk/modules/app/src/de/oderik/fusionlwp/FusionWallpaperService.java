@@ -19,13 +19,14 @@ import android.widget.Toast;
 public class FusionWallpaperService extends WallpaperService {
   public static final String TAG = FusionWallpaperService.class.getName();
 
-  public static final String PREFERENCE_POS_X = "posX";
-  public static final String PREFERENCE_POS_Y = "posY";
+  public static final String PREFERENCE_POS_X   = "posX";
+  public static final String PREFERENCE_POS_Y   = "posY";
   public static final String PREFERENCE_ENABLED = "enabled";
 
   public static final String SHARED_PREFERENCES_NAME = "countdownposition";
 
   private final Handler handler = new Handler();
+  private final FusionEventTiming fusionEventTiming = new FusionEventTiming();
 
   @Override
   public Engine onCreateEngine() {
@@ -35,20 +36,20 @@ public class FusionWallpaperService extends WallpaperService {
   class FusionEngine extends Engine implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private boolean visible;
-    private int surfaceWidth;
-    private int surfaceHeight;
+    private int     surfaceWidth;
+    private int     surfaceHeight;
     private int xPixels = 0;
     private int yPixels = 0;
 
-    private float countdownPosX;
-    private float countdownPosY;
+    private float   countdownPosX;
+    private float   countdownPosY;
     private boolean countdownEnabled;
 
     private boolean fusionInFuture = true;
 
-    private SharedPreferences preferences;
+    private       SharedPreferences preferences;
     final private CountdownDrawable countdownDrawable;
-    private Bitmap backgroundBitmap;
+    private       Bitmap            backgroundBitmap;
 
     private float initialPosX;
     private float initialPosY;
@@ -58,7 +59,7 @@ public class FusionWallpaperService extends WallpaperService {
 
 
     FusionEngine() {
-      countdownDrawable = new CountdownDrawable(FusionWallpaperService.this);
+      countdownDrawable = new CountdownDrawable(FusionWallpaperService.this, fusionEventTiming);
       countdownDrawable.setTypeface(Typeface.createFromAsset(getAssets(), "Anton.ttf"));
 
       final WallpaperManager wallpaperManager = WallpaperManager.getInstance(FusionWallpaperService.this);
@@ -242,6 +243,7 @@ public class FusionWallpaperService extends WallpaperService {
 
     void drawCountdown(Canvas c) {
       if (countdownEnabled) {
+        fusionEventTiming.update();
         countdownDrawable.draw(c);
       }
     }
@@ -275,7 +277,7 @@ public class FusionWallpaperService extends WallpaperService {
         // Reschedule the next redraw
         handler.removeCallbacks(drawCountdown);
         if (visible && fusionInFuture && countdownEnabled) {
-          handler.postDelayed(drawCountdown, FusionEventTiming.timeToNextSecond());
+          handler.postDelayed(drawCountdown, fusionEventTiming.timeToNextTick());
         }
       }
 

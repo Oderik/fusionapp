@@ -10,40 +10,26 @@ import java.util.TimeZone;
  */
 public class FusionEventTiming {
 
-  private static FusionEventTiming INSTANCE = new FusionEventTiming();
   private long now;
   private long nextFusionStart;
   private long nextFusionEnd;
-
-  public static FusionEventTiming get() {
-    return INSTANCE;
-  }
+  private boolean during;
 
   public final static long SECOND = 1000;
   public final static long MINUTE = 60 * SECOND;
   public final static long HOUR   = 60 * MINUTE;
   public final static long DAY    = 24 * HOUR;
+  private Calendar calendar;
 
-  public static enum Phase {
-    BEFORE (SECOND),
-    DURING (MINUTE);
-
-    private final long interval;
-
-    Phase(final long interval) {
-      this.interval = interval;
-    }
-
-    public long getInterval() {
-      return interval;
-    }
+  public String getCountdownString() {
+    return format(nextFusionStart - now);
   }
 
-  private static String[] TIMETABLE_DAY_OF_WEEK_NAMES = {"", "SO", "MO", "DI", "MI", "DO", "FR", "SA"};
+  private static String[] TIMETABLE_DAY_OF_WEEK_NAMES_SHORT = {"", "SO", "MO", "DI", "MI", "DO", "FR", "SA"};
+  private static String[] TIMETABLE_DAY_OF_WEEK_NAMES = {"", "SONNTAG", "MONTAG", "DIENSTAG", "MITTWOCH", "DONNERSTAG", "FREITAG", "SONNABEND"};
 
-  private Phase phase = Phase.BEFORE;
-
-  private FusionEventTiming() {
+  public FusionEventTiming() {
+    calendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Berlin"));
     update();
   }
 
@@ -51,21 +37,22 @@ public class FusionEventTiming {
     now = System.currentTimeMillis();
     updateNextFusionStart();
     updateNextFusionEnd();
-    final boolean isBefore = nextFusionStart < nextFusionEnd;
-    if (isBefore == (phase == Phase.BEFORE)) {
+    if (during == nextFusionEnd < nextFusionStart) {
       return false;
     } else {
-      phase = isBefore ? Phase.BEFORE : Phase.DURING;
+      during = !during;
       return true;
     }
   }
 
-  public long timeToNextSecond() {
-    return SECOND - (System.currentTimeMillis() % SECOND);
+  public long timeToNextTick() {
+    final long interval = getInterval();
+    return interval - (System.currentTimeMillis() % interval);
   }
 
-  public long nextSecond() {
-    return (System.currentTimeMillis() / SECOND + 1) * SECOND;
+  public long nextTick() {
+    final long interval = getInterval();
+    return (System.currentTimeMillis() / interval + 1) * interval;
   }
 
   public static String format(final long time) {
@@ -78,11 +65,11 @@ public class FusionEventTiming {
   }
 
   private Calendar getFusionCalendar() {
-    final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Berlin"));
+    calendar.setTimeInMillis(now);
     final int currentYear = calendar.get(Calendar.YEAR);
     calendar.clear();
     calendar.set(Calendar.YEAR, currentYear);
-    calendar.set(Calendar.MONTH, Calendar.JUNE);
+    calendar.set(Calendar.MONTH, Calendar.JULY);
     calendar.set(Calendar.HOUR_OF_DAY, 18);
     calendar.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
     calendar.set(Calendar.DAY_OF_WEEK_IN_MONTH, -Calendar.THURSDAY);
@@ -103,14 +90,16 @@ public class FusionEventTiming {
 
   private void updateNextFusionEnd() {
     final Calendar calendar = getFusionCalendar();
-    calendar.roll(Calendar.DAY_OF_YEAR, 5);
+    calendar.roll(Calendar.DAY_OF_YEAR, 4);
     ensureInFuture(calendar);
     nextFusionEnd = calendar.getTimeInMillis();
   }
 
-  public Phase getPhase() {
-    return phase;
+  public long getInterval() {
+    return during ? MINUTE : SECOND;
   }
 
-
+  public boolean isDuring() {
+    return during;
+  }
 }

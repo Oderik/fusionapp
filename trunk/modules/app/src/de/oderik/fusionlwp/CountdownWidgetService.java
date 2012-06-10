@@ -37,6 +37,7 @@ public class CountdownWidgetService extends Service {
   private Canvas canvas;
   private Intent intent;
   private boolean tickerRunning = false;
+  private FusionEventTiming fusionEventTiming = new FusionEventTiming();
 
   public IBinder onBind(Intent intent) {
     return null;
@@ -76,7 +77,7 @@ public class CountdownWidgetService extends Service {
       }
       final AlarmManager alarmManager = getAlarmManager();
       final PendingIntent pendingIntent = getPendingIntent();
-      alarmManager.setRepeating(AlarmManager.RTC, FusionEventTiming.nextSecond(), FusionEventTiming.SECOND, pendingIntent);
+      alarmManager.setRepeating(AlarmManager.RTC, fusionEventTiming.nextTick(), FusionEventTiming.SECOND, pendingIntent);
     }
   }
 
@@ -117,7 +118,7 @@ public class CountdownWidgetService extends Service {
   public void onCreate() {
     super.onCreate();
     final Typeface antonTypeface = Typeface.createFromAsset(getAssets(), "Anton.ttf");
-    countdownDrawable = new CountdownDrawable(this);
+    countdownDrawable = new CountdownDrawable(this, fusionEventTiming);
     countdownDrawable.setTypeface(antonTypeface);
     countdownDrawable.setBounds(0, 0, countdownDrawable.getIntrinsicWidth() - 1, countdownDrawable.getIntrinsicHeight() - 1);
     bitmap = Bitmap.createBitmap(countdownDrawable.getIntrinsicWidth(), countdownDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
