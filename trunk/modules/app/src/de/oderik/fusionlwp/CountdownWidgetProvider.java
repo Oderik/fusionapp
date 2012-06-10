@@ -3,6 +3,7 @@ package de.oderik.fusionlwp;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.content.Intent;
 
 /**
  * Created: 16.05.12
@@ -25,5 +26,14 @@ public class CountdownWidgetProvider extends AppWidgetProvider {
   @Override
   public void onDisabled(final Context context) {
     context.startService(CountdownWidgetService.createDisabledIntent(context));
+  }
+
+  @Override
+  public void onReceive(final Context context, final Intent intent) {
+    if (Intent.ACTION_TIME_CHANGED.equals(intent.getAction())) {
+      context.startService(CountdownWidgetService.createTimeChangedIntent(context));
+    } else {
+      super.onReceive(context, intent);
+    }
   }
 }

@@ -25,8 +25,8 @@ public class FusionEventTiming {
     return format(nextFusionStart - now);
   }
 
-  private static String[] TIMETABLE_DAY_OF_WEEK_NAMES_SHORT = {"", "SO", "MO", "DI", "MI", "DO", "FR", "SA"};
-  private static String[] TIMETABLE_DAY_OF_WEEK_NAMES = {"", "SONNTAG", "MONTAG", "DIENSTAG", "MITTWOCH", "DONNERSTAG", "FREITAG", "SONNABEND"};
+  private static String[] TIMETABLE_DAY_OF_WEEK_NAMES_SHORT = {"EI", "SO", "MO", "DI", "MI", "DO", "FR", "SA"};
+  private static String[] TIMETABLE_DAY_OF_WEEK_NAMES = {"KAPUTT", "SONNTAG", "MONTAG", "DIENSTAG", "MITTWOCH", "DONNERSTAG", "FREITAG", "SONNABEND"};
 
   public FusionEventTiming() {
     calendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Berlin"));
@@ -35,6 +35,7 @@ public class FusionEventTiming {
 
   public boolean update() {
     now = System.currentTimeMillis();
+    //TODO only recalculate if event is in the past or more than one year in the future
     updateNextFusionStart();
     updateNextFusionEnd();
     if (during == nextFusionEnd < nextFusionStart) {
