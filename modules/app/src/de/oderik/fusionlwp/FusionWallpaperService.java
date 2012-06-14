@@ -25,7 +25,7 @@ public class FusionWallpaperService extends WallpaperService {
 
   public static final String SHARED_PREFERENCES_NAME = "countdownposition";
 
-  private final Handler handler = new Handler();
+  private final Handler           handler           = new Handler();
   private final FusionEventTiming fusionEventTiming = new FusionEventTiming();
 
   @Override
@@ -48,6 +48,7 @@ public class FusionWallpaperService extends WallpaperService {
     private       SharedPreferences preferences;
     final private CountdownDrawable countdownDrawable;
     private       Bitmap            backgroundBitmap;
+    private int backgroundBitmapScale = 1;
 
     private float initialPosX;
     private float initialPosY;
@@ -126,9 +127,25 @@ public class FusionWallpaperService extends WallpaperService {
       if (width > 0 && height > 0) {
         final Drawable backgroundDrawable = getResources().getDrawable(R.drawable.background);
         backgroundDrawable.setBounds(0, 0, width - 1, height - 1);
-        backgroundBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        final Canvas canvas = new Canvas(backgroundBitmap);
-        backgroundDrawable.draw(canvas);
+        for (backgroundBitmapScale = 1; backgroundBitmapScale <= 4; backgroundBitmapScale++) {
+          if (backgroundBitmap != null) {
+            backgroundBitmap.recycle();
+          }
+          try {
+            backgroundBitmap = Bitmap.createBitmap(width / backgroundBitmapScale, height / backgroundBitmapScale, Bitmap.Config.RGB_565);
+            break;
+          } catch (Throwable e) {
+            Log.i(TAG, String.format("Error creating background bitmap: %s", e.getMessage()));
+          }
+        }
+        if (backgroundBitmap != null) {
+          final Canvas canvas = new Canvas(backgroundBitmap);
+          canvas.scale(1f / backgroundBitmapScale, 1f / backgroundBitmapScale);
+          backgroundDrawable.draw(canvas);
+        } else {
+          Log.i(TAG, String.format("Too many errors creating background image, using plain black instead."));
+          backgroundBitmapScale = 0;
+        }
       }
     }
 
@@ -230,7 +247,14 @@ public class FusionWallpaperService extends WallpaperService {
 
 
     void drawBackground(final Canvas canvas) {
-      canvas.drawBitmap(backgroundBitmap, xPixels, yPixels, new Paint());
+      if (backgroundBitmapScale > 0) {
+        canvas.save();
+        canvas.scale(backgroundBitmapScale, backgroundBitmapScale);
+        canvas.drawBitmap(backgroundBitmap, 1f * xPixels / backgroundBitmapScale, 1f * yPixels / backgroundBitmapScale, new Paint());
+        canvas.restore();
+      } else {
+        canvas.drawColor(Color.BLACK);
+      }
     }
 
     @Override
