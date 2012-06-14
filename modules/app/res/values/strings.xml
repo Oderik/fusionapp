@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="app_name">Фузион 2012</string>
+  <string name="app_name">Фузион Countdown</string>
   <string name="descriptionWidget">Fusion Countdown</string>
   <string name="lwp_description">The literal wallpaper of the current Fusion Festival homepage including an optional countdown.</string>
   <string name="label_bannerWidget">Fusion Banner</string>
