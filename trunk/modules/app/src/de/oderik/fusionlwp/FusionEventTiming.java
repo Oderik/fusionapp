@@ -22,7 +22,7 @@ public class FusionEventTiming {
   private Calendar calendar;
 
   private static String[] TIMETABLE_DAY_OF_WEEK_NAMES_SHORT = {"EI", "SO", "MO", "DI", "MI", "DO", "FR", "SA"};
-  private static String[] TIMETABLE_DAY_OF_WEEK_NAMES = {"KAPUTT", "SONNTAG", "MONTAG", "DIENSTAG", "MITTWOCH", "DONNERSTAG", "FREITAG", "SONNABEND"};
+  private static String[] TIMETABLE_DAY_OF_WEEK_NAMES = {"KAPUTT", "SONNTAG", "MONTAG", "DIENSTAG", "MITTWOCH", "DONNERSTAG", "FREITAG", "SAMSTAG"};
 
   public FusionEventTiming() {
     calendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Berlin"));
