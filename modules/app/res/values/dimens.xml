@@ -11,4 +11,6 @@
   <dimen name="logoWidth">132dp</dimen>
   <dimen name="logoHeight">132dp</dimen>
 
+  <dimen name="text_large">20sp</dimen>
+
 </resources>

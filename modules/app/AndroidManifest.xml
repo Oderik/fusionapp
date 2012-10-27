@@ -6,7 +6,8 @@
   <uses-sdk android:minSdkVersion="7"
             android:targetSdkVersion="14"/>
   <application android:label="@string/app_name"
-               android:icon="@drawable/icon">
+               android:icon="@drawable/icon"
+               android:theme="@style/Theme">
 
     <service android:label="@string/label_wallpaper"
              android:name=".FusionWallpaperService"
@@ -54,6 +55,12 @@
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
         <category android:name="android.intent.category.INFO"/>
+      </intent-filter>
+    </activity>
+    <activity android:name=".timeline.TimelineActivity">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
+        <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
   </application>
