@@ -13,5 +13,7 @@ public class TimelineActivity extends Activity {
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.timeline);
+
+    findViewById(R.id.content).setBackgroundDrawable(new StarfieldDrawable(this));
   }
 }
