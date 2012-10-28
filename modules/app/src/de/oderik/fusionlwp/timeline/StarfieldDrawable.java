@@ -3,6 +3,7 @@ package de.oderik.fusionlwp.timeline;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import de.oderik.fusionlwp.R;
@@ -36,8 +37,8 @@ public class StarfieldDrawable extends PaintDrawable {
     canvas.save();
 
     final Matrix canvasMatrix = canvas.getMatrix();
-    canvasMatrix.postRotate((System.currentTimeMillis() % 3600L) / 10f, starfield.getIntrinsicWidth() / 2, starfield.getIntrinsicHeight() / 2);
-    canvasMatrix.postConcat(matrix);
+    canvasMatrix.preConcat(matrix);
+    canvasMatrix.preRotate((System.currentTimeMillis() % 360000L) / 1000f, starfield.getIntrinsicWidth() / 2, starfield.getIntrinsicHeight() / 2);
     canvas.setMatrix(canvasMatrix);
 
     starfield.draw(canvas);
@@ -55,10 +56,16 @@ public class StarfieldDrawable extends PaintDrawable {
     final int starfieldWidth = starfield.getIntrinsicWidth();
     final int starfieldHeight = starfield.getIntrinsicHeight();
 
-    final float horizontalScale = (1f * width) / starfieldWidth;
-    final float verticalScale = (2f * height) / starfieldHeight;
-    final float scale = Math.max(verticalScale, horizontalScale);
-    matrix.setScale(scale, scale, starfieldWidth / 2, starfieldHeight / 4);
-    matrix.preTranslate(Math.min((width - height) / 2, 0), Math.min(height - width, 0));
+    final float radius = (float) Math.sqrt(width * width / 4f + height * height);
+
+    final float scale = 2 * radius / Math.min(starfieldWidth, starfieldHeight);
+    matrix.setTranslate(-starfieldWidth / 2f, 0);
+    matrix.postScale(scale, scale);
+    matrix.postTranslate(bounds.exactCenterX(), height - radius);
+  }
+
+  @Override
+  public int getOpacity() {
+    return PixelFormat.OPAQUE;
   }
 }
