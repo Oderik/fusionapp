@@ -22,11 +22,19 @@ public class TimelineActivity extends Activity {
     final ScrollView scrollView = (ScrollView) findViewById(R.id.scroll_view);
     final TimelineView timelineView = (TimelineView) findViewById(R.id.timeline);
 
+    final View bigView = findViewById(R.id.big);
+
     scrollView.addOnScrollChangeListener(new OnScrollChangeListener() {
       @Override
       public void onScrollChanged(final FrameLayout scrollView, final int l, final int t, final int oldl, final int oldt) {
-        final int level = 10000 * t / content.getHeight();
-        timelineView.setLevel(level);
+        final int bigViewHeight = bigView.getHeight();
+        final int timelineViewHeight = timelineView.getHeight();
+        if (bigViewHeight > timelineViewHeight) {
+          final int level = RocketDrawable.MAX_LEVEL * t / (bigViewHeight - timelineViewHeight);
+          timelineView.setLevel(level);
+        } else {
+          timelineView.setLevel(RocketDrawable.MAX_LEVEL);
+        }
       }
     });
   }

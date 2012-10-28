@@ -17,6 +17,8 @@ import de.oderik.fusionlwp.util.Tag;
 public class RocketDrawable extends PaintDrawable {
   private final static String TAG = Tag.of(RocketDrawable.class);
 
+  public static final int MAX_LEVEL = 10000;
+
   private final Bitmap rocketBitmap;
   private int top;
   private int left;
@@ -59,7 +61,7 @@ public class RocketDrawable extends PaintDrawable {
     final int level = getLevel();
 
     left = (bounds.width() - rocketBitmap.getWidth()) >> 1;
-    top = bounds.height() - rocketBitmap.getHeight() * (level / 10000);
+    top = bounds.height() - rocketBitmap.getHeight() * level / MAX_LEVEL;
 
     final boolean changed = oldTop != top || oldLeft != left;
     if (BuildConfig.DEBUG) {
