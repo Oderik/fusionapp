@@ -1,9 +1,10 @@
-package de.oderik.fusionlwp;
+package de.oderik.fusionlwp.countdown;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.*;
 import android.graphics.drawable.Drawable;
+import de.oderik.fusionlwp.R;
 
 /**
  * Created: 16.05.12

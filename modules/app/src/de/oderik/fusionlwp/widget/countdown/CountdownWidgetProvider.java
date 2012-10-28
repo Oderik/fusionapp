@@ -1,4 +1,4 @@
-package de.oderik.fusionlwp;
+package de.oderik.fusionlwp.widget.countdown;
 
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;

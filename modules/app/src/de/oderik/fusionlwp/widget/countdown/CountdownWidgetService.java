@@ -1,4 +1,4 @@
-package de.oderik.fusionlwp;
+package de.oderik.fusionlwp.widget.countdown;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -14,6 +14,10 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
 import android.widget.RemoteViews;
+import de.oderik.fusionlwp.BuildConfig;
+import de.oderik.fusionlwp.countdown.CountdownDrawable;
+import de.oderik.fusionlwp.countdown.FusionEventTiming;
+import de.oderik.fusionlwp.R;
 
 import java.util.Arrays;
 

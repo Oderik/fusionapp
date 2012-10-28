@@ -11,7 +11,7 @@
                android:hardwareAccelerated="true">
 
     <service android:label="@string/label_wallpaper"
-             android:name=".FusionWallpaperService"
+             android:name=".wallpaper.FusionWallpaperService"
              android:permission="android.permission.BIND_WALLPAPER">
       <intent-filter>
         <action android:name="android.service.wallpaper.WallpaperService"/>
@@ -20,9 +20,9 @@
                  android:resource="@xml/fusion_wallpaper"/>
     </service>
 
-    <service android:name=".CountdownWidgetService"
+    <service android:name=".widget.countdown.CountdownWidgetService"
              android:label="Countdown Widget"/>
-    <receiver android:name=".CountdownWidgetProvider"
+    <receiver android:name=".widget.countdown.CountdownWidgetProvider"
               android:label="@string/label_countdownWidget">
       <intent-filter>
         <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
@@ -33,7 +33,7 @@
       <meta-data android:name="android.appwidget.provider"
                  android:resource="@xml/countdown_widget"/>
     </receiver>
-    <receiver android:name=".LogoWidgetProvider"
+    <receiver android:name=".widget.simple.LogoWidgetProvider"
               android:label="@string/label_logoWidget">
       <intent-filter>
         <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
@@ -41,7 +41,7 @@
       <meta-data android:name="android.appwidget.provider"
                  android:resource="@xml/logo_widget"/>
     </receiver>
-    <receiver android:name=".BannerWidgetProvider"
+    <receiver android:name=".widget.simple.BannerWidgetProvider"
               android:label="@string/label_bannerWidget">
       <intent-filter>
         <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
@@ -49,7 +49,7 @@
       <meta-data android:name="android.appwidget.provider"
                  android:resource="@xml/banner_widget"/>
     </receiver>
-    <activity android:name=".WallpaperSettingsActivity"
+    <activity android:name=".wallpaper.WallpaperSettingsActivity"
               android:exported="true"/>
     <activity android:name=".WelcomeActivity"
               android:exported="true">
