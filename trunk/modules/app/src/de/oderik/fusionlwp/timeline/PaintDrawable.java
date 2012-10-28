@@ -12,8 +12,8 @@ import android.graphics.drawable.Drawable;
 public abstract class PaintDrawable extends Drawable {
   protected final Paint paint;
 
-  public PaintDrawable(final Paint paint) {
-    this.paint = paint;
+  public PaintDrawable() {
+    this.paint = new Paint();
   }
 
   @Override

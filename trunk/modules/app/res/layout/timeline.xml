@@ -6,7 +6,13 @@
 
              android:layout_width="fill_parent"
              android:layout_height="fill_parent">
-  <ScrollView android:fillViewport="true"
+  <de.oderik.fusionlwp.timeline.TimelineView android:id="@+id/timeline"
+
+                                             android:layout_width="fill_parent"
+                                             android:layout_height="fill_parent"/>
+  <de.oderik.fusionlwp.timeline.ScrollView android:id="@+id/scroll_view"
+
+              android:fillViewport="true"
 
               android:layout_width="fill_parent"
               android:layout_height="fill_parent">
@@ -28,8 +34,7 @@
 
                 android:layout_width="fill_parent"
                 android:layout_height="200dp"/>
-      <TextView
-                style="@style/TextStyle.Timeline"
+      <TextView style="@style/TextStyle.Timeline"
 
                 android:layout_width="fill_parent"
                 android:layout_height="200dp"/>
@@ -40,8 +45,7 @@
 
                 android:layout_width="fill_parent"
                 android:layout_height="200dp"/>
-      <TextView
-                style="@style/TextStyle.Timeline"
+      <TextView style="@style/TextStyle.Timeline"
 
                 android:layout_width="fill_parent"
                 android:layout_height="200dp"/>
@@ -53,5 +57,5 @@
                 android:layout_width="fill_parent"
                 android:layout_height="200dp"/>
     </LinearLayout>
-  </ScrollView>
+  </de.oderik.fusionlwp.timeline.ScrollView>
 </FrameLayout>
