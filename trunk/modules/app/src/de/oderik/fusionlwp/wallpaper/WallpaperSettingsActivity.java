@@ -1,7 +1,8 @@
-package de.oderik.fusionlwp;
+package de.oderik.fusionlwp.wallpaper;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import de.oderik.fusionlwp.R;
 
 /**
  * Created: 25.05.12

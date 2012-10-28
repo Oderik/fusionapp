@@ -1,4 +1,4 @@
-package de.oderik.fusionlwp;
+package de.oderik.fusionlwp.wallpaper;
 
 import android.app.WallpaperManager;
 import android.content.Context;
@@ -11,6 +11,10 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.widget.Toast;
+import de.oderik.fusionlwp.BuildConfig;
+import de.oderik.fusionlwp.countdown.CountdownDrawable;
+import de.oderik.fusionlwp.countdown.FusionEventTiming;
+import de.oderik.fusionlwp.R;
 
 /**
  * @author Maik.Riechel

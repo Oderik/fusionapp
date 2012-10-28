@@ -1,4 +1,4 @@
-package de.oderik.fusionlwp;
+package de.oderik.fusionlwp.countdown;
 
 import java.util.Calendar;
 import java.util.TimeZone;

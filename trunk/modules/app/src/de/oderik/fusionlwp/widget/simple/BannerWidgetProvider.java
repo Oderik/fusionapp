@@ -1,4 +1,4 @@
-package de.oderik.fusionlwp;
+package de.oderik.fusionlwp.widget.simple;
 
 import android.appwidget.AppWidgetProvider;
 
