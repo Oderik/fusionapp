@@ -3,7 +3,6 @@ package de.oderik.fusionlwp.timeline;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import de.oderik.fusionlwp.R;
@@ -24,7 +23,7 @@ public class StarfieldDrawable extends PaintDrawable {
   };
 
   public StarfieldDrawable(final Context context) {
-    super(new Paint());
+    super();
 
     starfield = context.getResources().getDrawable(R.drawable.starfield);
     starfield.setBounds(0, 0, starfield.getIntrinsicWidth(), starfield.getIntrinsicHeight());
