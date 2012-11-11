@@ -35,7 +35,6 @@ public class StarfieldDrawable extends PaintDrawable {
   @Override
   public void draw(final Canvas canvas) {
     canvas.save();
-
     final Matrix canvasMatrix = canvas.getMatrix();
     canvasMatrix.preConcat(matrix);
     canvasMatrix.preRotate((System.currentTimeMillis() % 360000L) / 1000f, starfield.getIntrinsicWidth() / 2, starfield.getIntrinsicHeight() / 2);
@@ -44,7 +43,7 @@ public class StarfieldDrawable extends PaintDrawable {
     starfield.draw(canvas);
     canvas.restore();
 
-    scheduleSelf(what, 50);
+    //scheduleSelf(what, 50);
   }
 
   @Override
