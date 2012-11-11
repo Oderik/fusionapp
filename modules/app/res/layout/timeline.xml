@@ -6,56 +6,21 @@
 
              android:layout_width="fill_parent"
              android:layout_height="fill_parent">
-  <de.oderik.fusionlwp.timeline.TimelineView android:id="@+id/timeline"
+  <ImageView android:id="@+id/rocket"
+             android:src="@drawable/icon"
 
-                                             android:layout_width="fill_parent"
-                                             android:layout_height="fill_parent"/>
+             android:layout_gravity="bottom|center_horizontal"
+             android:layout_width="fill_parent"
+             android:layout_height="fill_parent"/>
   <de.oderik.fusionlwp.timeline.ScrollView android:id="@+id/scroll_view"
+                                           android:scrollbars="none"
+                                           android:fillViewport="true"
 
-              android:fillViewport="true"
+                                           android:layout_width="fill_parent"
+                                           android:layout_height="fill_parent">
+    <ImageView android:id="@+id/calendar"
 
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent">
-    <LinearLayout android:id="@+id/big"
-
-                  android:orientation="vertical"
-
-                  android:layout_width="fill_parent"
-                  android:layout_height="wrap_content">
-      <TextView android:text="Große Pause"
-                style="@style/TextStyle.Timeline"
-
-                android:layout_width="fill_parent"
-                android:layout_height="200dp"/>
-      <TextView android:text="Ticketbewerbung"
-                android:background="#2f8f8f1f"
-
-                style="@style/TextStyle.Timeline"
-
-                android:layout_width="fill_parent"
-                android:layout_height="200dp"/>
-      <TextView style="@style/TextStyle.Timeline"
-
-                android:layout_width="fill_parent"
-                android:layout_height="200dp"/>
-      <TextView android:text="Ticketversand"
-                android:background="#2f1fff1f"
-
-                style="@style/TextStyle.Timeline"
-
-                android:layout_width="fill_parent"
-                android:layout_height="200dp"/>
-      <TextView style="@style/TextStyle.Timeline"
-
-                android:layout_width="fill_parent"
-                android:layout_height="200dp"/>
-      <TextView android:text="Fusion Festival 2013"
-                android:background="#2fff1f1f"
-
-                style="@style/TextStyle.Timeline"
-
-                android:layout_width="fill_parent"
-                android:layout_height="200dp"/>
-    </LinearLayout>
+               android:layout_width="fill_parent"
+               android:layout_height="wrap_content"/>
   </de.oderik.fusionlwp.timeline.ScrollView>
 </FrameLayout>

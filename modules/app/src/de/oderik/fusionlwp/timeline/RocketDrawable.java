@@ -22,17 +22,17 @@ public class RocketDrawable extends PaintDrawable {
   private final Bitmap rocketBitmap;
   private int top;
   private int left;
+  private int width;
+  private int height;
 
   public RocketDrawable(final Context context) {
-    final Drawable drawable = context.getResources().getDrawable(R.drawable.icon);
+    final Drawable drawable = context.getResources().getDrawable(R.drawable.rocket);
 
     final int intrinsicWidth = drawable.getIntrinsicWidth();
     final int intrinsicHeight = drawable.getIntrinsicHeight();
-    final int width;
-    final int height;
     if (intrinsicWidth > 0 && intrinsicHeight > 0) {
-      width = intrinsicWidth;
-      height = intrinsicHeight;
+      width = intrinsicWidth * 2;
+      height = intrinsicHeight * 2;
     } else {
       width = 128;
       height = 128;
@@ -44,6 +44,9 @@ public class RocketDrawable extends PaintDrawable {
 
   @Override
   public void draw(final Canvas canvas) {
+    if (BuildConfig.DEBUG) {
+      Log.v(TAG, String.format("Drawing at %d, %d", left, top));
+    }
     canvas.drawBitmap(rocketBitmap, left, top, paint);
   }
 
@@ -83,13 +86,13 @@ public class RocketDrawable extends PaintDrawable {
   @Override
   public int getIntrinsicWidth() {
     // we don't want any adjustment based on our size
-    return -1;
+    return width;
   }
 
   @Override
   public int getIntrinsicHeight() {
     // we don't want any adjustment based on our size
-    return -1;
+    return height;
   }
 
 }
