@@ -1,7 +1,6 @@
 package de.oderik.fusionlwp.timeline;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -19,27 +18,26 @@ public class RocketDrawable extends PaintDrawable {
 
   public static final int MAX_LEVEL = 10000;
 
-  private final Bitmap rocketBitmap;
   private int top;
   private int left;
   private int width;
   private int height;
+  private final Drawable drawable;
 
   public RocketDrawable(final Context context) {
-    final Drawable drawable = context.getResources().getDrawable(R.drawable.rocket);
+    drawable = context.getResources().getDrawable(R.drawable.rocket);
+
+    paint.setAntiAlias(true);
 
     final int intrinsicWidth = drawable.getIntrinsicWidth();
     final int intrinsicHeight = drawable.getIntrinsicHeight();
     if (intrinsicWidth > 0 && intrinsicHeight > 0) {
-      width = intrinsicWidth * 2;
-      height = intrinsicHeight * 2;
+      width = intrinsicWidth;
+      height = intrinsicHeight;
     } else {
       width = 128;
       height = 128;
     }
-    rocketBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-    drawable.setBounds(0, 0, width, height);
-    drawable.draw(new Canvas(rocketBitmap));
   }
 
   @Override
@@ -47,7 +45,7 @@ public class RocketDrawable extends PaintDrawable {
     if (BuildConfig.DEBUG) {
       Log.v(TAG, String.format("Drawing at %d, %d", left, top));
     }
-    canvas.drawBitmap(rocketBitmap, left, top, paint);
+    drawable.draw(canvas);
   }
 
   @Override
@@ -63,12 +61,13 @@ public class RocketDrawable extends PaintDrawable {
     final Rect bounds = getBounds();
     final int level = getLevel();
 
-    left = (bounds.width() - rocketBitmap.getWidth()) >> 1;
-    top = bounds.height() - rocketBitmap.getHeight() * level / MAX_LEVEL;
+    left = (bounds.width() - drawable.getIntrinsicWidth()) >> 1;
+    top = bounds.height() - drawable.getIntrinsicHeight() * level / MAX_LEVEL;
 
     final boolean changed = oldTop != top || oldLeft != left;
-    if (BuildConfig.DEBUG) {
-      if (changed) {
+    if (changed) {
+      drawable.setBounds(left, top, left + width, top + height);
+      if (BuildConfig.DEBUG) {
         Log.v(TAG, String.format("(%d, %d) -> (%d, %d)", oldLeft, oldTop, left, top));
       }
     }
@@ -85,14 +84,14 @@ public class RocketDrawable extends PaintDrawable {
 
   @Override
   public int getIntrinsicWidth() {
-    // we don't want any adjustment based on our size
-    return width;
+    // we don't want to influence our environment by our size
+    return -1;
   }
 
   @Override
   public int getIntrinsicHeight() {
-    // we don't want any adjustment based on our size
-    return height;
+    // we don't want to influence our environment by our size
+    return -1;
   }
 
 }
