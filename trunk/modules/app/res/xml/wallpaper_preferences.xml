@@ -8,4 +8,10 @@
                       android:key="enabled"
                       android:defaultValue="true"
                       android:persistent="true"/>
+  
+    <CheckBoxPreference android:title="@string/preferenceTitle_notification"
+                      android:summary="@string/preferenceSummary_notification"
+                      android:key="notification_enabled"
+                      android:defaultValue="true"
+                      android:persistent="true"/>
 </PreferenceScreen>
