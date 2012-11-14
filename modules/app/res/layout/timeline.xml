@@ -3,24 +3,20 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
              android:id="@+id/content"
+             android:background="@drawable/sky"
 
              android:layout_width="fill_parent"
              android:layout_height="fill_parent">
   <ImageView android:id="@+id/rocket"
-             android:src="@drawable/icon"
-
+             android:contentDescription="rocket"
              android:layout_gravity="bottom|center_horizontal"
              android:layout_width="fill_parent"
              android:layout_height="fill_parent"/>
-  <de.oderik.fusionlwp.timeline.ScrollView android:id="@+id/scroll_view"
-                                           android:scrollbars="none"
-                                           android:fillViewport="true"
+  <!--<ScrollView android:layout_width="fill_parent"-->
+              <!--android:layout_height="fill_parent">-->
+    <de.oderik.fusionlwp.timeline.CalendarView android:id="@+id/calendar"
 
-                                           android:layout_width="fill_parent"
-                                           android:layout_height="fill_parent">
-    <ImageView android:id="@+id/calendar"
-
-               android:layout_width="fill_parent"
-               android:layout_height="wrap_content"/>
-  </de.oderik.fusionlwp.timeline.ScrollView>
+                                               android:layout_width="fill_parent"
+                                               android:layout_height="fill_parent"/>
+  <!--</ScrollView>-->
 </FrameLayout>
