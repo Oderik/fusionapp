@@ -1,11 +1,9 @@
 package de.oderik.fusionlwp.notification;
 
-import java.util.Calendar;
-
+import android.content.Context;
 import de.oderik.fusionlwp.R;
 
-import android.app.PendingIntent;
-import android.content.Context;
+import java.util.Calendar;
 
 /**
  * Data holder for all fusion events that should generate a notification
