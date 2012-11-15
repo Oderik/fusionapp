@@ -59,6 +59,7 @@ public class CalendarView extends View {
 
   private long    debugTimestamp = SystemClock.uptimeMillis();
   private boolean initialized    = false;
+  private OnScrollChangeListener onScrollChangeListener = null;
 
   public CalendarView(Context context, AttributeSet attrs) {
     this(context, attrs, 0);
@@ -108,6 +109,8 @@ public class CalendarView extends View {
 
     setMinimumWidth((int) (2 * dayHeight + dayWidth));
     setMinimumHeight(dayHeight * dayCountOfYear);
+
+    setScrollContainer(true);
   }
 
   private static String[] buildMonthNames() {
@@ -164,8 +167,9 @@ public class CalendarView extends View {
 
   @Override
   protected void onScrollChanged(final int l, final int t, final int oldl, final int oldt) {
-    super.onScrollChanged(l, t, oldl, oldt);
-
+    if (onScrollChangeListener != null) {
+      onScrollChangeListener.onScrollChanged(this, maxScrollY == 0 ? 1 : (float) getScrollY() / maxScrollY);
+    }
   }
 
   private void drawYear(final Canvas canvas, final int start, final int end) {
@@ -284,6 +288,10 @@ public class CalendarView extends View {
             super.onTouchEvent(event);
   }
 
+  public void setOnScrollChangeListener(final OnScrollChangeListener onScrollChangeListener) {
+    this.onScrollChangeListener = onScrollChangeListener;
+  }
+
   private class OnScrollGestureListener extends GestureDetector.SimpleOnGestureListener {
     @Override
     public boolean onDown(final MotionEvent e) {
@@ -311,4 +319,7 @@ public class CalendarView extends View {
     }
   }
 
+  public interface OnScrollChangeListener {
+    void onScrollChanged(CalendarView calendarView, float relativeScroll);
+  }
 }
