@@ -57,8 +57,8 @@ public class CalendarView extends View {
     }
   };
 
-  private long    debugTimestamp = SystemClock.uptimeMillis();
-  private boolean initialized    = false;
+  private long                   debugTimestamp         = SystemClock.uptimeMillis();
+  private boolean                initialized            = false;
   private OnScrollChangeListener onScrollChangeListener = null;
 
   public CalendarView(Context context, AttributeSet attrs) {
@@ -158,9 +158,17 @@ public class CalendarView extends View {
       canvas.rotate(270);
       final String ticketanmeldung = "Ticketanmeldung";
       final float width = eraserPaint.measureText(ticketanmeldung);
-      canvas.drawText(ticketanmeldung, -clippedSalesPhaseRect.top - width, clippedSalesPhaseRect.left - eraserPaint.ascent(), eraserPaint);
+      if (width <= clippedSalesPhaseRect.height()) {
+        eraserPaint.setTextAlign(Paint.Align.CENTER);
+        canvas.drawText(ticketanmeldung, -clippedSalesPhaseRect.centerY(), clippedSalesPhaseRect.left - eraserPaint.ascent(), eraserPaint);
+      } else if (clippedSalesPhaseRect.bottom == salesPhaseRect.bottom) {
+        eraserPaint.setTextAlign(Paint.Align.LEFT);
+        canvas.drawText(ticketanmeldung, -clippedSalesPhaseRect.bottom, clippedSalesPhaseRect.left - eraserPaint.ascent(), eraserPaint);
+      } else {
+        eraserPaint.setTextAlign(Paint.Align.RIGHT);
+        canvas.drawText(ticketanmeldung, -clippedSalesPhaseRect.top, clippedSalesPhaseRect.left - eraserPaint.ascent(), eraserPaint);
+      }
 
-      //canvas.drawCircle(salesPhaseRect.centerX(), salesPhaseRect.centerY(), salesPhaseRect.width(), eraserPaint);
       canvas.restore();
     }
   }
@@ -197,6 +205,7 @@ public class CalendarView extends View {
       if (today) {
         canvas.saveLayer(getLeft(), dayY, getRight() - dayHeight, dayY + dayHeight, null, Canvas.ALL_SAVE_FLAG);
         canvas.drawRect(getLeft(), dayY, getRight() - dayHeight, dayY + dayHeight, paint);
+        eraserPaint.setTextAlign(Paint.Align.RIGHT);
       }
       text = Integer.toString(calendar.get(Calendar.DAY_OF_MONTH));
 
