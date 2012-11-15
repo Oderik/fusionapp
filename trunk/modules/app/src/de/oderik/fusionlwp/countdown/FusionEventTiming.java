@@ -4,7 +4,7 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 /**
- * Created: 16.05.12
+ * Handles time calculations for the countdown.
  *
  * @author Oderik
  */
@@ -25,10 +25,17 @@ public class FusionEventTiming {
   private static String[] TIMETABLE_DAY_OF_WEEK_NAMES = {"KAPUTT", "SONNTAG", "MONTAG", "DIENSTAG", "MITTWOCH", "DONNERSTAG", "FREITAG", "SAMSTAG"};
 
   public FusionEventTiming() {
+    // Do all calculations in fusion festival time zone
     calendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Berlin"));
     update();
   }
 
+  /**
+   * Update values based on the current system time.
+   *
+   * @return <code>true</code> if the festival started or ended since last call
+   * (and thus the countdown needs to switch between countdown and festival modes)
+   */
   public boolean update() {
     now = System.currentTimeMillis();
     //TODO only recalculate if event is in the past or more than one year in the future
@@ -42,11 +49,19 @@ public class FusionEventTiming {
     }
   }
 
+  /**
+   * @return the milliseconds left until to the next tick.
+   * A tick occurs every second in countdown mode and every minute in festival mode.
+   */
   public long timeToNextTick() {
     final long interval = getInterval();
     return interval - (System.currentTimeMillis() % interval);
   }
 
+  /**
+   * @return the timestamp of the next tick.
+   * A tick occurs every second in countdown mode and every minute in festival mode.
+   */
   public long nextTick() {
     final long interval = getInterval();
     return (System.currentTimeMillis() / interval + 1) * interval;
@@ -83,14 +98,23 @@ public class FusionEventTiming {
     nextFusionEnd = calendar.getTimeInMillis();
   }
 
+  /**
+   * @return in milliseconds the length of a second or minute, depending on if we are currently in countdown or festival mode.
+   */
   public long getInterval() {
     return during ? MINUTE : SECOND;
   }
 
+  /**
+   * @return <code>true</code> if we are in festival mode, <code>false</code> otherwise.
+   */
   public boolean isDuring() {
     return during;
   }
 
+  /**
+   * @return a String representing the current day (during festival mode).
+   */
   public String getFestivalDayString() {
     calendar.setTimeZone(TimeZone.getTimeZone("Europe/Berlin"));
     calendar.setTimeInMillis(now);
@@ -98,6 +122,9 @@ public class FusionEventTiming {
     return TIMETABLE_DAY_OF_WEEK_NAMES[calendar.get(Calendar.DAY_OF_WEEK)];
   }
 
+  /**
+   * @return a String representing the current hour of the day (during festival mode).
+   */
   public String getFestivalHourString() {
     calendar.setTimeZone(TimeZone.getTimeZone("Europe/Berlin"));
     calendar.setTimeInMillis(now);
@@ -105,6 +132,9 @@ public class FusionEventTiming {
     return String.format("%02d", calendar.get(Calendar.HOUR_OF_DAY));
   }
 
+  /**
+   * @return a String representing the current countdown (in countdown mode).
+   */
   public String getCountdownString() {
     final long days = (nextFusionStart - now) / DAY;
     final long hours = (nextFusionStart - now) % DAY / HOUR;
@@ -114,6 +144,9 @@ public class FusionEventTiming {
     return String.format("%02dd %02dh %02dm %02ds", days, hours, minutes, seconds);
   }
 
+  /**
+   * @return a value between 0 and 1 representing the progress of the current hour of the day (in festival mode).
+   */
   public float getHourFraction() {
     calendar.setTimeZone(TimeZone.getTimeZone("Europe/Berlin"));
     calendar.setTimeInMillis(now);
