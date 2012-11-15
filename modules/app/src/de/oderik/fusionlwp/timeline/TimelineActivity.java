@@ -1,6 +1,7 @@
 package de.oderik.fusionlwp.timeline;
 
 import android.app.Activity;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -31,24 +32,16 @@ public class TimelineActivity extends Activity {
     final RocketDrawable rocketDrawable = new RocketDrawable(this);
     rocketView.setImageDrawable(rocketDrawable);
     calendarView = (CalendarView) findViewById(R.id.calendar);
-    //scrollView.addOnScrollChangeListener(new OnScrollChangeListener() {
-    //  private final Matrix matrix = new Matrix();
-    //
-    //  @Override
-    //  public void onScrollChanged(final FrameLayout scrollView, final int l, final int t, final int oldl, final int oldt) {
-    //    final int calendarViewHeight = calendarView.getHeight();
-    //    final int rocketViewHeight = rocketView.getHeight();
-    //
-    //    final int level;
-    //    if (calendarViewHeight > rocketViewHeight) {
-    //      level = RocketDrawable.MAX_LEVEL * t / (calendarViewHeight - rocketViewHeight);
-    //    } else {
-    //      level = RocketDrawable.MAX_LEVEL;
-    //    }
-    //    rocketDrawable.setLevel(level);
-    //    rocketView.invalidateDrawable(rocketDrawable);
-    //  }
-    //});
+    calendarView.setOnScrollChangeListener(new CalendarView.OnScrollChangeListener() {
+      private final Matrix matrix = new Matrix();
+
+      @Override
+      public void onScrollChanged(final CalendarView calendarView, final float relativeScroll) {
+        final int level = (int) (RocketDrawable.MAX_LEVEL * relativeScroll);
+        rocketDrawable.setLevel(level);
+        rocketView.invalidateDrawable(rocketDrawable);
+      }
+    });
   }
 
 }
