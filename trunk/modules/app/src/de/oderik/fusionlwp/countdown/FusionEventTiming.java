@@ -1,5 +1,7 @@
 package de.oderik.fusionlwp.countdown;
 
+import de.oderik.fusionlwp.event.FusionEventCalculation;
+
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -19,14 +21,15 @@ public class FusionEventTiming {
   public final static long MINUTE = 60 * SECOND;
   public final static long HOUR   = 60 * MINUTE;
   public final static long DAY    = 24 * HOUR;
-  private Calendar calendar;
+
+  // Do all calculations in fusion festival time zone
+  private final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Berlin"));
+  private final FusionEventCalculation fusionEventCalculation = new FusionEventCalculation(calendar);
 
   private static String[] TIMETABLE_DAY_OF_WEEK_NAMES_SHORT = {"EI", "SO", "MO", "DI", "MI", "DO", "FR", "SA"};
   private static String[] TIMETABLE_DAY_OF_WEEK_NAMES = {"KAPUTT", "SONNTAG", "MONTAG", "DIENSTAG", "MITTWOCH", "DONNERSTAG", "FREITAG", "SAMSTAG"};
 
   public FusionEventTiming() {
-    // Do all calculations in fusion festival time zone
-    calendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Berlin"));
     update();
   }
 
@@ -67,18 +70,6 @@ public class FusionEventTiming {
     return (System.currentTimeMillis() / interval + 1) * interval;
   }
 
-  private Calendar getFusionCalendar() {
-    calendar.setTimeInMillis(now);
-    final int currentYear = calendar.get(Calendar.YEAR);
-    calendar.clear();
-    calendar.set(Calendar.YEAR, currentYear);
-    calendar.set(Calendar.MONTH, Calendar.JULY);
-    calendar.set(Calendar.HOUR_OF_DAY, 18);
-    calendar.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
-    calendar.set(Calendar.DAY_OF_WEEK_IN_MONTH, -Calendar.THURSDAY);
-    return calendar;
-  }
-
   private void ensureInFuture(final Calendar calendar) {
     while (calendar.getTimeInMillis() < System.currentTimeMillis()) {
       calendar.roll(Calendar.YEAR, true);
@@ -86,13 +77,13 @@ public class FusionEventTiming {
   }
 
   private void updateNextFusionStart() {
-    final Calendar calendar = getFusionCalendar();
+    final Calendar calendar = fusionEventCalculation.getFusionCalendar(now);
     ensureInFuture(calendar);
     nextFusionStart = calendar.getTimeInMillis();
   }
 
   private void updateNextFusionEnd() {
-    final Calendar calendar = getFusionCalendar();
+    final Calendar calendar = fusionEventCalculation.getFusionCalendar(now);
     calendar.roll(Calendar.DAY_OF_YEAR, 4);
     ensureInFuture(calendar);
     nextFusionEnd = calendar.getTimeInMillis();
