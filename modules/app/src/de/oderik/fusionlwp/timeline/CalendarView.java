@@ -11,6 +11,10 @@ import android.view.View;
 import android.widget.Scroller;
 import de.oderik.fusionlwp.BuildConfig;
 import de.oderik.fusionlwp.R;
+import de.oderik.fusionlwp.event.FestivalStartEvent;
+import de.oderik.fusionlwp.event.FestivalStopEvent;
+import de.oderik.fusionlwp.event.SnapshotTimeBase;
+import de.oderik.fusionlwp.event.SystemTimeBase;
 import de.oderik.fusionlwp.util.Tag;
 
 import java.util.Calendar;
@@ -30,7 +34,7 @@ public class CalendarView extends View {
 
   private final Calendar calendar;
 
-  private Rect clipBounds = new Rect();
+  private final Rect clipBounds = new Rect();
   private final int      dayCountOfYear;
   private final Calendar today;
 
@@ -61,12 +65,22 @@ public class CalendarView extends View {
   private boolean                initialized            = false;
   private OnScrollChangeListener onScrollChangeListener = null;
 
+  private SnapshotTimeBase   timeBase;
+  private FestivalStopEvent  previousFestivalEnd;
+  private FestivalStartEvent nextFestivalStart;
+  private long previousTimeStamp = Long.MIN_VALUE;
+
   public CalendarView(Context context, AttributeSet attrs) {
     this(context, attrs, 0);
   }
 
   public CalendarView(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
+
+    timeBase = new SnapshotTimeBase(new SystemTimeBase());
+    previousFestivalEnd = new FestivalStopEvent(timeBase);
+    previousFestivalEnd.setIteration(-1);
+    nextFestivalStart = new FestivalStartEvent(previousFestivalEnd);
 
     today = Calendar.getInstance();
     calendar = Calendar.getInstance();
@@ -111,6 +125,7 @@ public class CalendarView extends View {
     setMinimumHeight(dayHeight * dayCountOfYear);
 
     setScrollContainer(true);
+
   }
 
   private static String[] buildMonthNames() {
@@ -130,24 +145,49 @@ public class CalendarView extends View {
   @Override
   protected void onDraw(final Canvas canvas) {
     if (BuildConfig.DEBUG) {
-      final long newTimestamp = SystemClock.uptimeMillis();
-      final long elapsed = newTimestamp - debugTimestamp;
-      debugTimestamp = newTimestamp;
-      Log.v(TAG, elapsed + "ms since last frame, that's " + 1000 / elapsed + "fps.");
+      debugTiming();
     }
 
+    updateClipBounds(canvas);
+
+    timeBase.update();
+
+    final long currentTimeStamp = previousFestivalEnd.getTimestamp();
+    if (currentTimeStamp != previousTimeStamp) {
+      previousTimeStamp = currentTimeStamp;
+
+      calendar.setTimeInMillis(currentTimeStamp);
+    }
+
+
+
+    calendar.setTimeInMillis(previousFestivalEnd.getTimestamp());
+    final int actualStartDay = calendar.get(Calendar.DAY_OF_YEAR);
+    int totalDays = calendar.getActualMaximum(Calendar.DAY_OF_YEAR) - actualStartDay;
+    calendar.setTimeInMillis(nextFestivalStart.getTimestamp());
+    totalDays += calendar.get(Calendar.DAY_OF_YEAR);
+
+    final int start = actualStartDay + (clipBounds.top / dayHeight );
+    final int end = actualStartDay + (Math.min(1 + clipBounds.bottom / dayHeight, totalDays));
+
+    drawYear(canvas, start, end);
+
+    drawEvents(canvas, start, end);
+  }
+
+  private void updateClipBounds(final Canvas canvas) {
     final boolean hasClipBounds = canvas.getClipBounds(clipBounds);
     if (!hasClipBounds) {
       Log.w(TAG, String.format("no clipbounds"));
       clipBounds.set(getLeft(), getTop(), getRight(), getBottom());
     }
+  }
 
-    final int start = hasClipBounds ? clipBounds.top / dayHeight : 0;
-    final int end = hasClipBounds ? Math.min(1 + clipBounds.bottom / dayHeight, dayCountOfYear) : dayCountOfYear;
-
-    drawYear(canvas, start, end);
-
-    drawEvents(canvas, start, end);
+  private void debugTiming() {
+    final long newTimestamp = SystemClock.uptimeMillis();
+    final long elapsed = newTimestamp - debugTimestamp;
+    debugTimestamp = newTimestamp;
+    Log.v(TAG, elapsed + "ms since last frame, that's " + 1000 / elapsed + "fps.");
   }
 
   private void drawEvents(final Canvas canvas, final int start, final int end) {
@@ -191,10 +231,10 @@ public class CalendarView extends View {
 
   private void drawDays(final Canvas canvas, final int start, final int end) {
     paint.setTextAlign(Paint.Align.RIGHT);
-    for (int day = start; day < end; day++) {
+    calendar.setTimeInMillis(previousFestivalEnd.getTimestamp());
+    int day = 0;
+    while (calendar.getTimeInMillis() < nextFestivalStart.getTimestamp()) {
       final int dayY = day * dayHeight;
-
-      calendar.set(Calendar.DAY_OF_YEAR, day + 1);
 
       if (calendar.get(Calendar.DAY_OF_MONTH) == 1) {
         canvas.drawLine(getLeft(), dayY, getRight(), dayY, paint);
@@ -214,6 +254,9 @@ public class CalendarView extends View {
       if (today) {
         canvas.restore();
       }
+
+      calendar.add(Calendar.DAY_OF_YEAR, 1);
+      day++;
     }
   }
 
