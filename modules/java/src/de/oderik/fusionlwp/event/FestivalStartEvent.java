@@ -21,10 +21,8 @@ public class FestivalStartEvent extends BaseEvent {
   }
 
   @Override
-  public long getTimestamp() {
-    final long now = timeBase.getTimestamp();
-    final int iteration = getIteration();
-    calendar.setTimeInMillis(now);
+  protected long calculateTimestamp(final long timebase, final int iteration) {
+    calendar.setTimeInMillis(timebase);
     final int month = calendar.get(Calendar.MONTH);
     final int year = calendar.get(Calendar.YEAR);
     if (month < Calendar.JUNE) {
@@ -33,7 +31,7 @@ public class FestivalStartEvent extends BaseEvent {
       return fusionEventCalculation.getFusionCalendarOfYear(year + iteration + 1).getTimeInMillis();
     } else {
       final long fusionTimeInMillis = fusionEventCalculation.getFusionCalendarOfYear(year).getTimeInMillis();
-      if (fusionTimeInMillis > now) {
+      if (fusionTimeInMillis > timebase) {
         return iteration == 0 ? fusionTimeInMillis : fusionEventCalculation.getFusionCalendarOfYear(year + iteration).getTimeInMillis();
       } else {
         return iteration == -1 ? fusionTimeInMillis : fusionEventCalculation.getFusionCalendarOfYear(year + iteration + 1).getTimeInMillis();

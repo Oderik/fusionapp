@@ -16,13 +16,12 @@ public class SalesStopEvent extends BaseEvent {
   }
 
   @Override
-  public long getTimestamp() {
-    final long timestamp = timeBase.getTimestamp();
-    calendar.setTimeInMillis(timestamp);
+  protected long calculateTimestamp(final long timebase, final int iteration) {
+    calendar.setTimeInMillis(timebase);
     calendar.set(Calendar.DAY_OF_MONTH, 1);
     calendar.set(Calendar.MONTH, Calendar.MARCH);
     calendar.roll(Calendar.DAY_OF_MONTH, false);
-    while (timestamp > calendar.getTimeInMillis()) {
+    while (timebase > calendar.getTimeInMillis()) {
       calendar.roll(Calendar.YEAR, true);
     }
     calendar.roll(Calendar.YEAR, getIteration());

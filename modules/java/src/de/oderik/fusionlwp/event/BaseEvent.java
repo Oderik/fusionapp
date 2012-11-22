@@ -11,7 +11,13 @@ public abstract class BaseEvent implements Event {
 
   protected final TimeBase timeBase;
   protected final Calendar calendar;
+
   private int iteration = 0;
+
+  private boolean cached = false;
+  private int  previousIteration;
+  private long previousTimeBase;
+  private long cachedTimestamp;
 
   protected BaseEvent(final TimeBase timeBase) {
     this(timeBase, Calendar.getInstance(TimeZone.getTimeZone("Europe/Berlin")));
@@ -30,4 +36,21 @@ public abstract class BaseEvent implements Event {
   protected int getIteration() {
     return iteration;
   }
+
+
+  @Override
+  public long getTimestamp() {
+    final long timeBase = this.timeBase.getTimestamp();
+    final int iteration = getIteration();
+    if (previousTimeBase == timeBase && previousIteration == iteration && cached) {
+      return cachedTimestamp;
+    }
+
+    previousIteration = iteration;
+    previousTimeBase = timeBase;
+    cached = true;
+    return cachedTimestamp = calculateTimestamp(timeBase, iteration);
+  }
+
+  protected abstract long calculateTimestamp(long timebase, int iteration);
 }
