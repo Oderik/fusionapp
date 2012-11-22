@@ -16,13 +16,12 @@ public class SalesStartEvent extends BaseEvent {
   }
 
   @Override
-  public long getTimestamp() {
-    final long timestamp = timeBase.getTimestamp();
-    calendar.setTimeInMillis(timestamp);
+  protected long calculateTimestamp(final long timebase, final int iteration) {
+    calendar.setTimeInMillis(timebase);
     calendar.set(Calendar.DAY_OF_MONTH, 1);
     calendar.set(Calendar.MONTH, Calendar.DECEMBER);
-    while (timestamp > calendar.getTimeInMillis()) {
-      calendar.roll(Calendar.YEAR, true);
+    while (timebase > calendar.getTimeInMillis()) {
+      calendar.add(Calendar.YEAR, 1);
     }
     calendar.roll(Calendar.YEAR, getIteration());
     return calendar.getTimeInMillis();
