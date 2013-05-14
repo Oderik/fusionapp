@@ -139,7 +139,7 @@ public class CountdownWidgetService extends Service {
   public void onCreate() {
     super.onCreate();
     final Typeface antonTypeface = Typeface.createFromAsset(getAssets(), "Anton.ttf");
-    countdownDrawable = new CountdownDrawable(this, fusionEventTiming);
+    countdownDrawable = new CountdownDrawable(this, fusionEventTiming, de.oderik.fusionlwp.theme.EventTheme.CURRENT);
     countdownDrawable.setTypeface(antonTypeface);
     countdownDrawable.setBounds(0, 0, countdownDrawable.getIntrinsicWidth() - 1, countdownDrawable.getIntrinsicHeight() - 1);
     bitmap = Bitmap.createBitmap(countdownDrawable.getIntrinsicWidth(), countdownDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);

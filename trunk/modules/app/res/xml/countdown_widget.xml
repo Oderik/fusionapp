@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:previewImage="@drawable/countdown_panel"
+                    android:previewImage="@drawable/countdown_panel_2012"
                     android:resizeMode="none"
                     android:minWidth="@dimen/countdownWidth"
                     android:minHeight="@dimen/countdownHeight"
