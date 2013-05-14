@@ -20,6 +20,7 @@
     <option name="DEFAULT_COMPILER" value="Javac" />
     <excludeFromCompile>
       <directory url="file://$PROJECT_DIR$/../../modules/app/gen" includeSubdirectories="true" />
+      <directory url="file://D:/Programme/Android/android-sdk/samples/android-7/CubeLiveWallpaper/gen" includeSubdirectories="true" />
     </excludeFromCompile>
     <resourceExtensions />
     <wildcardResourcePatterns>

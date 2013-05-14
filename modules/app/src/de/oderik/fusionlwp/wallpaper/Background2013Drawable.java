@@ -20,6 +20,8 @@ public class Background2013Drawable extends LiveBackgroundDrawable {
 
   private final Paint backgroundPaint = new Paint();
 
+  private float xOffset;
+  private float yOffset;
   private int xPixels;
   private int yPixels;
 
@@ -48,8 +50,12 @@ public class Background2013Drawable extends LiveBackgroundDrawable {
     canvas.save();
     canvas.translate(xPixels, yPixels);
     canvas.drawPaint(backgroundPaint);
+
+
+
     if (paralaxLayers != null) {
       for (Bitmap paralaxLayer : paralaxLayers) {
+        canvas.translate(xOffset * 5, yOffset * 5);
         canvas.drawBitmap(paralaxLayer, 0, 0, paint);
       }
     }
@@ -75,6 +81,8 @@ public class Background2013Drawable extends LiveBackgroundDrawable {
 
   @Override
   protected void onOffsetsChanged(final float xOffset, final float yOffset, final float xStep, final float yStep, final int xPixels, final int yPixels) {
+    this.xOffset = xOffset;
+    this.yOffset = yOffset;
     this.xPixels = xPixels;
     this.yPixels = yPixels;
     invalidateSelf();
