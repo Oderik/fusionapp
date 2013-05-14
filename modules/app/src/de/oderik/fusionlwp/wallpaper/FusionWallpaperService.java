@@ -3,18 +3,23 @@ package de.oderik.fusionlwp.wallpaper;
 import android.app.WallpaperManager;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.*;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.service.wallpaper.WallpaperService;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.widget.Toast;
 import de.oderik.fusionlwp.BuildConfig;
+import de.oderik.fusionlwp.R;
 import de.oderik.fusionlwp.countdown.CountdownDrawable;
 import de.oderik.fusionlwp.countdown.FusionEventTiming;
-import de.oderik.fusionlwp.R;
+import de.oderik.fusionlwp.theme.EventTheme;
 
 /**
  * @author Maik.Riechel
@@ -23,14 +28,16 @@ import de.oderik.fusionlwp.R;
 public class FusionWallpaperService extends WallpaperService {
   public static final String TAG = FusionWallpaperService.class.getName();
 
-  public static final String PREFERENCE_POS_X   = "posX";
-  public static final String PREFERENCE_POS_Y   = "posY";
+  public static final String PREFERENCE_POS_X = "posX";
+  public static final String PREFERENCE_POS_Y = "posY";
   public static final String PREFERENCE_ENABLED = "enabled";
 
   public static final String SHARED_PREFERENCES_NAME = "countdownposition";
 
-  private final Handler           handler           = new Handler();
+  private final Handler handler = new Handler();
   private final FusionEventTiming fusionEventTiming = new FusionEventTiming();
+
+  private EventTheme theme = EventTheme.CURRENT;
 
   @Override
   public Engine onCreateEngine() {
@@ -39,36 +46,57 @@ public class FusionWallpaperService extends WallpaperService {
 
   class FusionEngine extends Engine implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private boolean visible;
-    private int     surfaceWidth;
-    private int     surfaceHeight;
-    private int xPixels = 0;
-    private int yPixels = 0;
+    private final Drawable.Callback drawableCallback = new Drawable.Callback() {
+      @Override
+      public void invalidateDrawable(final Drawable who) {
+        if (who == backgroundDrawable) {
+          handler.post(drawEverything);
+        }
+      }
 
-    private float   countdownPosX;
-    private float   countdownPosY;
+      @Override
+      public void scheduleDrawable(final Drawable who, final Runnable what, final long when) {
+        if (who == backgroundDrawable) {
+          handler.postAtTime(what, when);
+        }
+
+      }
+
+      @Override
+      public void unscheduleDrawable(final Drawable who, final Runnable what) {
+        handler.removeCallbacks(what);
+      }
+    };
+
+    private boolean visible;
+    private int surfaceWidth;
+    private int surfaceHeight;
+
+    private float countdownPosX;
+    private float countdownPosY;
     private boolean countdownEnabled;
 
-    private       SharedPreferences preferences;
-    final private CountdownDrawable countdownDrawable;
-    private       Bitmap            backgroundBitmap;
-    private int backgroundBitmapScale = 1;
+    private SharedPreferences preferences;
+    private final CountdownDrawable countdownDrawable;
+    private LiveWallpaperDrawable backgroundDrawable;
 
     private float initialPosX;
     private float initialPosY;
     private Matrix matrix = null;
 
-    private float[] points = new float[2];
+    private final float[] points = new float[2];
 
 
     FusionEngine() {
-      countdownDrawable = new CountdownDrawable(FusionWallpaperService.this, fusionEventTiming);
+      countdownDrawable = new CountdownDrawable(FusionWallpaperService.this, fusionEventTiming, de.oderik.fusionlwp.theme.EventTheme.CURRENT);
       countdownDrawable.setTypeface(Typeface.createFromAsset(getAssets(), "Anton.ttf"));
 
+      backgroundDrawable = new Background2012Drawable(getResources());
+      backgroundDrawable.setCallback(drawableCallback);
       final WallpaperManager wallpaperManager = WallpaperManager.getInstance(FusionWallpaperService.this);
       final int desiredMinimumHeight = wallpaperManager.getDesiredMinimumHeight();
       final int desiredMinimumWidth = wallpaperManager.getDesiredMinimumWidth();
-      updateBackgroundBitmap(desiredMinimumWidth, desiredMinimumHeight);
+      setBackgroundBounds(desiredMinimumWidth, desiredMinimumHeight);
     }
 
 
@@ -127,31 +155,6 @@ public class FusionWallpaperService extends WallpaperService {
       editor.commit();
     }
 
-    private void updateBackgroundBitmap(final int width, final int height) {
-      if (width > 0 && height > 0) {
-        final Drawable backgroundDrawable = getResources().getDrawable(R.drawable.background);
-        backgroundDrawable.setBounds(0, 0, width - 1, height - 1);
-        for (backgroundBitmapScale = 1; backgroundBitmapScale <= 4; backgroundBitmapScale++) {
-          if (backgroundBitmap != null) {
-            backgroundBitmap.recycle();
-          }
-          try {
-            backgroundBitmap = Bitmap.createBitmap(width / backgroundBitmapScale, height / backgroundBitmapScale, Bitmap.Config.RGB_565);
-            break;
-          } catch (Throwable e) {
-            Log.i(TAG, String.format("Error creating background bitmap: %s", e.getMessage()));
-          }
-        }
-        if (backgroundBitmap != null) {
-          final Canvas canvas = new Canvas(backgroundBitmap);
-          canvas.scale(1f / backgroundBitmapScale, 1f / backgroundBitmapScale);
-          backgroundDrawable.draw(canvas);
-        } else {
-          Log.i(TAG, String.format("Too many errors creating background image, using plain black instead."));
-          backgroundBitmapScale = 0;
-        }
-      }
-    }
 
     final Runnable drawEverything = new DrawRunnable() {
       @Override
@@ -193,6 +196,9 @@ public class FusionWallpaperService extends WallpaperService {
       handler.removeCallbacks(drawCountdown);
       if (preferences != null) {
         preferences.unregisterOnSharedPreferenceChangeListener(this);
+      }
+      if (backgroundDrawable != null) {
+        backgroundDrawable.setCallback(null);
       }
       super.onDestroy();
     }
@@ -244,27 +250,23 @@ public class FusionWallpaperService extends WallpaperService {
     @Override
     public void onOffsetsChanged(float xOffset, float yOffset,
                                  float xStep, float yStep, int xPixels, int yPixels) {
-      this.xPixels = xPixels;
-      this.yPixels = yPixels;
+      backgroundDrawable.offsetsChanged(xOffset, yOffset, xStep, yStep, xPixels, yPixels);
       drawEverything.run();
     }
 
 
     void drawBackground(final Canvas canvas) {
-      if (backgroundBitmapScale > 0) {
-        canvas.save();
-        canvas.scale(backgroundBitmapScale, backgroundBitmapScale);
-        canvas.drawBitmap(backgroundBitmap, 1f * xPixels / backgroundBitmapScale, 1f * yPixels / backgroundBitmapScale, new Paint());
-        canvas.restore();
-      } else {
-        canvas.drawColor(Color.BLACK);
-      }
+      backgroundDrawable.draw(canvas);
     }
 
     @Override
     public void onDesiredSizeChanged(final int desiredWidth, final int desiredHeight) {
       super.onDesiredSizeChanged(desiredWidth, desiredHeight);
-      updateBackgroundBitmap(desiredWidth, desiredHeight);
+      setBackgroundBounds(desiredWidth, desiredHeight);
+    }
+
+    private void setBackgroundBounds(final int desiredWidth, final int desiredHeight) {
+      backgroundDrawable.setBounds(0, 0, desiredWidth, desiredHeight);
     }
 
     void drawCountdown(Canvas c) {
@@ -283,8 +285,9 @@ public class FusionWallpaperService extends WallpaperService {
     abstract class DrawRunnable implements Runnable {
       @Override
       public void run() {
+        long time;
         if (BuildConfig.DEBUG) {
-          Log.v(TAG, "about to draw something");
+          time = SystemClock.elapsedRealtime();
         }
 
         final SurfaceHolder holder = getSurfaceHolder();
@@ -300,6 +303,12 @@ public class FusionWallpaperService extends WallpaperService {
         } finally {
           if (canvas != null) holder.unlockCanvasAndPost(canvas);
         }
+
+        if (BuildConfig.DEBUG) {
+          final long elapsed = SystemClock.elapsedRealtime() - time;
+          Log.d(TAG, String.format("frame drawn in %dms (%ffps)", elapsed, 1000f/Math.max(elapsed, 1)));
+        }
+
         // Reschedule the next redraw
         handler.removeCallbacks(drawCountdown);
         if (visible && countdownEnabled) {
@@ -309,6 +318,7 @@ public class FusionWallpaperService extends WallpaperService {
 
       abstract void draw(final Canvas canvas);
     }
+
 
   }
 

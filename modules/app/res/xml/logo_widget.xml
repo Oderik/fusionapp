@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:previewImage="@drawable/sidebar_logo"
+                    android:previewImage="@drawable/sidebar_logo_2012"
                     android:resizeMode="none"
                     android:minWidth="@dimen/logoWidth"
                     android:minHeight="@dimen/logoHeight"
-                    android:initialLayout="@layout/logo_widget"
+                    android:initialLayout="@layout/logo_widget_2012"
                     android:updatePeriodMillis="0"/>

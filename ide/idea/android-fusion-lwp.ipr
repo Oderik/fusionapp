@@ -1003,9 +1003,9 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="false" name="Timeline" type="AndroidRunConfigurationType" factoryName="Android Application">
+    <configuration default="false" name="Welcome" type="AndroidRunConfigurationType" factoryName="Android Application">
       <module name="app" />
-      <option name="ACTIVITY_CLASS" value="de.oderik.fusionlwp.timeline.TimelineActivity" />
+      <option name="ACTIVITY_CLASS" value="de.oderik.fusionlwp.WelcomeActivity" />
       <option name="MODE" value="specific_activity" />
       <option name="DEPLOY" value="true" />
       <option name="TARGET_SELECTION_MODE" value="USB_DEVICE" />

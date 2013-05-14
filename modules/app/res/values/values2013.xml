@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <array name="paralax_layers_2013">
+    <item>@drawable/b_2013</item>
+    <item>@drawable/o_2013</item>
+    <item>@drawable/s_2013</item>
+  </array>
+</resources>

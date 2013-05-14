@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:previewImage="@drawable/logo_mobile_content"
+                    android:previewImage="@drawable/logo_mobile_content_2012"
                     android:resizeMode="none"
                     android:minWidth="@dimen/bannerWidth"
                     android:minHeight="@dimen/bannerHeight"
-                    android:initialLayout="@layout/banner_widget"
+                    android:initialLayout="@layout/banner_widget_2012"
                     android:updatePeriodMillis="0"/>

@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.*;
 import android.graphics.drawable.Drawable;
 import de.oderik.fusionlwp.R;
+import de.oderik.fusionlwp.theme.EventTheme;
 
 /**
  * Created: 16.05.12
@@ -24,13 +25,13 @@ public class CountdownDrawable extends Drawable {
   private final Paint             boxPaint;
   private       float             boxSize;
 
-  public CountdownDrawable(final Context context, final FusionEventTiming fusionEventTiming) {
+  public CountdownDrawable(final Context context, final FusionEventTiming fusionEventTiming, final EventTheme theme) {
     this.fusionEventTiming = fusionEventTiming;
     Resources resources = context.getResources();
     intrinsicWidth = resources.getDimensionPixelOffset(R.dimen.countdownWidth);
     intrinsicHeight = resources.getDimensionPixelOffset(R.dimen.countdownHeight);
 
-    backgroundDrawable = resources.getDrawable(R.drawable.countdown_panel);
+    backgroundDrawable = resources.getDrawable(theme.countdownPanel);
 
     textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     textPaint.setColor(DEFAULT_TEXT_COLOR);
@@ -70,10 +71,7 @@ public class CountdownDrawable extends Drawable {
 
 
   private void drawBackground(final Canvas canvas) {
-    canvas.save();
-    backgroundDrawable.setBounds(getBounds());
     backgroundDrawable.draw(canvas);
-    canvas.restore();
   }
 
   private void drawCountdown(final Canvas canvas) {
@@ -148,5 +146,11 @@ public class CountdownDrawable extends Drawable {
   @Override
   public int getMinimumHeight() {
     return getIntrinsicHeight();
+  }
+
+  @Override
+  protected void onBoundsChange(final Rect bounds) {
+    super.onBoundsChange(bounds);
+    backgroundDrawable.setBounds(bounds);
   }
 }
