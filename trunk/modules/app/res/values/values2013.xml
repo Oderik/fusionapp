@@ -5,4 +5,6 @@
     <item>@drawable/o_2013</item>
     <item>@drawable/s_2013</item>
   </array>
+
+  <color name="countdown_background_2013">#e25235</color>
 </resources>
