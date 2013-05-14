@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="descriptionWidget">Fusion Countdown</string>
+  <string name="lwp_description">Die Tapete der aktuellen Homepage des Fusion Festivals, auf Wunsch mit Countdown.</string>
+  <string name="hint_moveCountdown">Du kannst den Countdown verschieben!</string>
+  <string name="label_wallpaper">Fusiontapete</string>
+  <string name="preferenceScreenTitle_wallpaper">Einstellungen Fusiontapete</string>
+  <string name="preferenceTitle_countdown">Countdown</string>
+  <string name="preferenceSummary_countdown">Soll der Countdown auf der Tapete angezeigt werden?\nMan kann ihn übrigens verschieben!</string>
+
+  <string name="welcome">&lt;p&gt;Danke, dass du den Fusion Festival Countdown installiert hast.
+    Diese App enthält einen Live-Hintergrund und Widgets für den Homescreen.&lt;/p&gt;
+    &lt;p&gt;Den Hintergrund kannst du nun in der Liste deiner Live-Hintergründe auswählen.&lt;/p&gt;
+    &lt;p&gt;Ein &lt;u&gt;Widget kannst du deinem Homescreen hinzufügen&lt;/u&gt;, indem du lange auf eine freie Fläche deines Homescreens drückst.
+    Es erscheint dann ein Menü, das dir anbietet, eines deiner Widgets zu installieren.&lt;/p&gt;
+    &lt;p&gt;Viel Spaß!&lt;/p&gt;</string>
+  <string name="button_lwpChooser">Live-Hintergründe</string>
+</resources>

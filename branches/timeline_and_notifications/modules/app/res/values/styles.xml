@@ -1,0 +1,15 @@
+<resources>
+  <style name="TextAppearance" parent="android:TextAppearance"/>
+
+  <style name="TextAppearance.Timeline">
+    <item name="android:textSize">@dimen/text_large</item>
+    <item name="android:textStyle">bold</item>
+  </style>
+
+  <style name="TextStyle"/>
+
+  <style name="TextStyle.Timeline">
+    <item name="android:textAppearance">@style/TextAppearance.Timeline</item>
+    <item name="android:gravity">center</item>
+  </style>
+</resources>

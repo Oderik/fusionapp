@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="de.oderik.fusionlwp"
+          android:versionCode="9"
+          android:versionName="1.7">
+  <uses-sdk android:minSdkVersion="7"
+            android:targetSdkVersion="14"/>
+  <application android:label="@string/app_name"
+               android:icon="@drawable/icon"
+               android:theme="@style/Theme"
+               android:hardwareAccelerated="true">
+
+    <service android:label="@string/label_wallpaper"
+             android:name=".wallpaper.FusionWallpaperService"
+             android:permission="android.permission.BIND_WALLPAPER">
+      <intent-filter>
+        <action android:name="android.service.wallpaper.WallpaperService"/>
+      </intent-filter>
+      <meta-data android:name="android.service.wallpaper"
+                 android:resource="@xml/fusion_wallpaper"/>
+    </service>
+
+    <service android:name=".widget.countdown.CountdownWidgetService"
+             android:label="Countdown Widget"/>
+    <receiver android:name=".widget.countdown.CountdownWidgetProvider"
+              android:label="@string/label_countdownWidget">
+      <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+      </intent-filter>
+      <intent-filter>
+        <action android:name="android.intent.action.TIME_SET"/>
+      </intent-filter>
+      <meta-data android:name="android.appwidget.provider"
+                 android:resource="@xml/countdown_widget"/>
+    </receiver>
+    <receiver android:name=".widget.simple.LogoWidgetProvider"
+              android:label="@string/label_logoWidget">
+      <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+      </intent-filter>
+      <meta-data android:name="android.appwidget.provider"
+                 android:resource="@xml/logo_widget"/>
+    </receiver>
+    <receiver android:name=".widget.simple.BannerWidgetProvider"
+              android:label="@string/label_bannerWidget">
+      <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+      </intent-filter>
+      <meta-data android:name="android.appwidget.provider"
+                 android:resource="@xml/banner_widget"/>
+    </receiver>
+    <receiver android:name=".notification.AlarmReceiver" android:process=":remote">
+        </receiver>
+    <activity android:name=".wallpaper.WallpaperSettingsActivity"
+              android:exported="true"/>
+    <activity android:name=".WelcomeActivity"
+              android:exported="true">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
+        <category android:name="android.intent.category.INFO"/>
+        <category android:name="android.intent.category.LAUNCHER"/>
+      </intent-filter>
+    </activity>
+    <activity android:name=".timeline.TimelineActivity">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
+        
+      </intent-filter>
+    </activity>
+  </application>
+</manifest> 

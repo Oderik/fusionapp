@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">Фузион Countdown</string>
+  <string name="descriptionWidget">Fusion Countdown</string>
+  <string name="lwp_description">The literal wallpaper of the current Fusion Festival homepage including an optional countdown.</string>
+  <string name="label_bannerWidget">Fusion Banner</string>
+  <string name="label_countdownWidget">Fusion Countdown</string>
+  <string name="label_logoWidget">Fusion Logo</string>
+  <string name="hint_moveCountdown">You can drag the countdown around!</string>
+  <string name="label_wallpaper">Fusion wallpaper</string>
+  <string name="preferenceScreenTitle_wallpaper">Fusion wallpaper preferences</string>
+  <string name="preferenceTitle_countdown">Countdown</string>
+  <string name="preferenceSummary_countdown">Show the countdown on the wallpaper?\nBy the way, you can drag it around!</string>
+  <string name="welcome">&lt;p&gt;Thank you for installing the Fusion Festival countdown.
+    This app contains a live wallpaper and widgets for your homescreen.&lt;/p&gt;
+    &lt;p&gt;You can now choose the wallpaper from your installed live wallpapers.&lt;/p&gt;
+    &lt;p&gt;You can &lt;u&gt;add a widget to your homescreen&lt;/u&gt; by longpressing free space of your homescreen.
+    A menu will appear allowing you to install one of your widgets.&lt;/p&gt;
+    &lt;p&gt;Have fun!&lt;/p&gt;</string>
+  <string name="button_lwpChooser">Live wallpapers</string>
+  <string name="event_title_prepare_to_register">Prepare to register</string>
+  <string name="event_text_prepare_to_register">Ask your Friends, get a clique name and feel the anticipation</string>
+  <string name="event_title_register">Register for tickets</string>
+  <string name="event_text_register">Goto www.fusion-festival.de and register for tickets and excitement raises…</string>
+  <string name="event_title_festival_start">YEAH - officially started</string>
+  <string name="event_text_festival_start">No time for text - get beer and stuff and go to Turmbühne :o)</string>
+  <string name="preferenceSummary_notification">Notifications</string>
+  <string name="preferenceTitle_notification">Show further notifications, so you dont miss important dates of the fusion</string>
+</resources>

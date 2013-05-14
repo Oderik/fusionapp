@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:previewImage="@drawable/logo_mobile_content"
+                    android:resizeMode="none"
+                    android:minWidth="@dimen/bannerWidth"
+                    android:minHeight="@dimen/bannerHeight"
+                    android:initialLayout="@layout/banner_widget"
+                    android:updatePeriodMillis="0"/>
