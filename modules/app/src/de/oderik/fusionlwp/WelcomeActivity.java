@@ -1,6 +1,5 @@
 package de.oderik.fusionlwp;
 
-import de.oderik.fusionlwp.notification.AlarmReceiver;
 import android.app.Activity;
 import android.app.WallpaperManager;
 import android.content.Intent;
@@ -9,7 +8,6 @@ import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * Created: 25.05.12
@@ -25,7 +23,6 @@ public class WelcomeActivity extends Activity implements View.OnClickListener {
       welcomeText.setTypeface(Typeface.createFromAsset(getAssets(), "Anton.ttf"));
       welcomeText.setText(Html.fromHtml(getString(R.string.welcome)));
     }
-    AlarmReceiver.registerAlarms(this);
   }
 
   private void startWallpaperChooser() {
