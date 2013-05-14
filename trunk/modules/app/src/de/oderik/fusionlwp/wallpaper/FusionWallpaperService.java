@@ -9,6 +9,7 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.service.wallpaper.WallpaperService;
 import android.util.Log;
@@ -34,7 +35,6 @@ public class FusionWallpaperService extends WallpaperService {
 
   public static final String SHARED_PREFERENCES_NAME = "countdownposition";
 
-  private final Handler handler = new Handler();
   private final FusionEventTiming fusionEventTiming = new FusionEventTiming();
 
   private EventTheme theme = EventTheme.CURRENT;
@@ -86,12 +86,22 @@ public class FusionWallpaperService extends WallpaperService {
 
     private final float[] points = new float[2];
 
+    private Handler handler;
+
 
     FusionEngine() {
       countdownDrawable = new CountdownDrawable(FusionWallpaperService.this, fusionEventTiming, de.oderik.fusionlwp.theme.EventTheme.CURRENT);
       countdownDrawable.setTypeface(Typeface.createFromAsset(getAssets(), "Anton.ttf"));
 
-      backgroundDrawable = new Background2012Drawable(getResources());
+      new Thread(new Runnable() {
+        @Override
+        public void run() {
+          Looper.prepare();
+          handler = new Handler();
+        }
+      }).start();
+
+      backgroundDrawable = new Background2013Drawable(getResources());
       backgroundDrawable.setCallback(drawableCallback);
       final WallpaperManager wallpaperManager = WallpaperManager.getInstance(FusionWallpaperService.this);
       final int desiredMinimumHeight = wallpaperManager.getDesiredMinimumHeight();
