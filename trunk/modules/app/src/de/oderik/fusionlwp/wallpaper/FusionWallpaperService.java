@@ -232,6 +232,8 @@ public class FusionWallpaperService extends WallpaperService {
 
       surfaceWidth = width;
       surfaceHeight = height;
+
+      backgroundDrawable.setSurfaceSize(width, height);
       updateCountdownBounds();
 
       drawEverything.run();
@@ -280,7 +282,7 @@ public class FusionWallpaperService extends WallpaperService {
     }
 
     void drawCountdown(Canvas c) {
-      if (countdownEnabled) {
+      if (false /*countdownEnabled*/) {
         fusionEventTiming.update();
         countdownDrawable.draw(c);
       }
