@@ -8,8 +8,8 @@ import de.oderik.fusionlwp.R;
  */
 public enum EventTheme {
   CURRENT(
-          R.drawable.countdown_panel_2012,
-          R.drawable.background_2012),
+          R.drawable.countdown_panel_2013,
+          R.drawable.background_2013),
 
   FUSION_2012(
           R.drawable.countdown_panel_2012,
