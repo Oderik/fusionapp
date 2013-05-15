@@ -3,5 +3,5 @@
 <wallpaper xmlns:android="http://schemas.android.com/apk/res/android"
         android:description="@string/lwp_description"
         android:thumbnail="@drawable/background_2012"
-        android:settingsActivity="de.oderik.fusionlwp.wallpaper.nlpaperSettingsActivity"
+        android:settingsActivity="de.oderik.fusionlwp.wallpaper.WallpaperSettingsActivity"
         />

@@ -282,7 +282,7 @@ public class FusionWallpaperService extends WallpaperService {
     }
 
     void drawCountdown(Canvas c) {
-      if (false /*countdownEnabled*/) {
+      if (countdownEnabled) {
         fusionEventTiming.update();
         countdownDrawable.draw(c);
       }
