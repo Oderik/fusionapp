@@ -15,4 +15,7 @@
     Es erscheint dann ein Menü, das dir anbietet, eines deiner Widgets zu installieren.&lt;/p&gt;
     &lt;p&gt;Viel Spaß!&lt;/p&gt;</string>
   <string name="button_lwpChooser">Live-Hintergründe</string>
+  <string name="current_theme">Aktuell</string>
+  <string name="label_theme_2012">2012</string>
+  <string name="label_theme_2013">2013</string>
 </resources>

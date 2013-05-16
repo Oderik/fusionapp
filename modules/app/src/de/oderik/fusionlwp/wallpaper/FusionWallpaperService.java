@@ -1,7 +1,6 @@
 package de.oderik.fusionlwp.wallpaper;
 
 import android.app.WallpaperManager;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -29,22 +28,16 @@ import de.oderik.fusionlwp.theme.EventTheme;
 public class FusionWallpaperService extends WallpaperService {
   public static final String TAG = FusionWallpaperService.class.getName();
 
-  public static final String PREFERENCE_POS_X = "posX";
-  public static final String PREFERENCE_POS_Y = "posY";
-  public static final String PREFERENCE_ENABLED = "enabled";
-
-  public static final String SHARED_PREFERENCES_NAME = "countdownposition";
-
   private final FusionEventTiming fusionEventTiming = new FusionEventTiming();
 
-  private EventTheme theme = EventTheme.CURRENT;
+  private EventTheme theme = EventTheme.FUSION_2013;
 
   @Override
   public Engine onCreateEngine() {
     return new FusionEngine();
   }
 
-  class FusionEngine extends Engine implements SharedPreferences.OnSharedPreferenceChangeListener {
+  class FusionEngine extends Engine implements Preferences.OnPreferencesChangedListener {
 
     private final Drawable.Callback drawableCallback = new Drawable.Callback() {
       @Override
@@ -72,11 +65,7 @@ public class FusionWallpaperService extends WallpaperService {
     private int surfaceWidth;
     private int surfaceHeight;
 
-    private float countdownPosX;
-    private float countdownPosY;
-    private boolean countdownEnabled;
-
-    private SharedPreferences preferences;
+    private Preferences preferences;
     private final CountdownDrawable countdownDrawable;
     private LiveWallpaperDrawable backgroundDrawable;
 
@@ -90,7 +79,7 @@ public class FusionWallpaperService extends WallpaperService {
 
 
     FusionEngine() {
-      countdownDrawable = new CountdownDrawable(FusionWallpaperService.this, fusionEventTiming, de.oderik.fusionlwp.theme.EventTheme.CURRENT);
+      countdownDrawable = new CountdownDrawable(FusionWallpaperService.this, fusionEventTiming, de.oderik.fusionlwp.theme.EventTheme.FUSION_2013);
       countdownDrawable.setTypeface(Typeface.createFromAsset(getAssets(), "Anton.ttf"));
 
       new Thread(new Runnable() {
@@ -116,9 +105,9 @@ public class FusionWallpaperService extends WallpaperService {
         switch (event.getAction()) {
           case MotionEvent.ACTION_DOWN:
             final Rect countdownBounds = countdownDrawable.getBounds();
-            if (countdownEnabled && countdownBounds.contains((int) event.getX(), (int) event.getY())) {
-              initialPosX = countdownPosX;
-              initialPosY = countdownPosY;
+            if (preferences.isCountdownEnabled() && countdownBounds.contains((int) event.getX(), (int) event.getY())) {
+              initialPosX = preferences.getCountdownPosX();
+              initialPosY = preferences.getCountdownPosY();
 
               matrix = new Matrix();
               final int intrinsicWidth = countdownDrawable.getIntrinsicWidth();
@@ -127,7 +116,7 @@ public class FusionWallpaperService extends WallpaperService {
               points[0] = event.getX();
               points[1] = event.getY();
               matrix.mapPoints(points);
-              matrix.postTranslate(countdownPosX - points[0], countdownPosY - points[1]);
+              matrix.postTranslate(preferences.getCountdownPosX() - points[0], preferences.getCountdownPosY() - points[1]);
             }
             break;
           case MotionEvent.ACTION_MOVE:
@@ -135,8 +124,8 @@ public class FusionWallpaperService extends WallpaperService {
               points[0] = event.getX();
               points[1] = event.getY();
               matrix.mapPoints(points);
-              countdownPosX = Math.max(0f, Math.min(1f, points[0]));
-              countdownPosY = Math.max(0f, Math.min(1f, points[1]));
+              preferences.setCountdownPosX(Math.max(0f, Math.min(1f, points[0])));
+              preferences.setCountdownPosY(Math.max(0f, Math.min(1f, points[1])));
               updateCountdownBounds();
               drawEverything.run();
             }
@@ -148,8 +137,8 @@ public class FusionWallpaperService extends WallpaperService {
           default:
             if (matrix != null) {
               matrix = null;
-              countdownPosX = initialPosX;
-              countdownPosY = initialPosY;
+              preferences.setCountdownPosX(initialPosX);
+              preferences.setCountdownPosY(initialPosY);
               drawEverything.run();
             }
             break;
@@ -158,11 +147,7 @@ public class FusionWallpaperService extends WallpaperService {
     }
 
     private void savePreferences() {
-      SharedPreferences.Editor editor = preferences.edit();
-      editor.putFloat(PREFERENCE_POS_X, countdownPosX);
-      editor.putFloat(PREFERENCE_POS_Y, countdownPosY);
-      editor.putBoolean(PREFERENCE_ENABLED, countdownEnabled);
-      editor.commit();
+      preferences.save();
     }
 
 
@@ -185,27 +170,21 @@ public class FusionWallpaperService extends WallpaperService {
     @Override
     public void onCreate(final SurfaceHolder surfaceHolder) {
       super.onCreate(surfaceHolder);
-      preferences = getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_MULTI_PROCESS);
-      loadPreferences();
-      preferences.registerOnSharedPreferenceChangeListener(this);
+      preferences = new Preferences(FusionWallpaperService.this);
+      preferences.setOnPreferencesChangedListener(this);
 
       setTouchEventsEnabled(isPreview());
-      if (isPreview() && countdownEnabled) {
+      if (isPreview() && preferences.isCountdownEnabled()) {
         Toast.makeText(FusionWallpaperService.this, getString(R.string.hint_moveCountdown), Toast.LENGTH_LONG).show();
       }
     }
 
-    private void loadPreferences() {
-      countdownPosX = preferences.getFloat(PREFERENCE_POS_X, .5f);
-      countdownPosY = preferences.getFloat(PREFERENCE_POS_Y, .5f);
-      countdownEnabled = preferences.getBoolean(PREFERENCE_ENABLED, true);
-    }
 
     @Override
     public void onDestroy() {
       handler.removeCallbacks(drawCountdown);
       if (preferences != null) {
-        preferences.unregisterOnSharedPreferenceChangeListener(this);
+        preferences.setOnPreferencesChangedListener(null);
       }
       if (backgroundDrawable != null) {
         backgroundDrawable.setCallback(null);
@@ -242,8 +221,8 @@ public class FusionWallpaperService extends WallpaperService {
     private void updateCountdownBounds() {
       final int intrinsicWidth = countdownDrawable.getIntrinsicWidth();
       final int intrinsicHeight = countdownDrawable.getIntrinsicHeight();
-      final int left = (int) ((surfaceWidth - intrinsicWidth) * countdownPosX);
-      final int top = (int) ((surfaceHeight - intrinsicHeight) * countdownPosY);
+      final int left = (int) ((surfaceWidth - intrinsicWidth) * preferences.getCountdownPosX());
+      final int top = (int) ((surfaceHeight - intrinsicHeight) * preferences.getCountdownPosY());
       countdownDrawable.setBounds(left, top, left + intrinsicWidth, top + intrinsicHeight);
     }
 
@@ -282,15 +261,14 @@ public class FusionWallpaperService extends WallpaperService {
     }
 
     void drawCountdown(Canvas c) {
-      if (countdownEnabled) {
+      if (preferences.isCountdownEnabled()) {
         fusionEventTiming.update();
         countdownDrawable.draw(c);
       }
     }
 
     @Override
-    public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, final String key) {
-      loadPreferences();
+    public void onPreferencesChanged(final Preferences preferences) {
       updateCountdownBounds();
     }
 
@@ -318,12 +296,12 @@ public class FusionWallpaperService extends WallpaperService {
 
         if (BuildConfig.DEBUG) {
           final long elapsed = SystemClock.elapsedRealtime() - time;
-          Log.d(TAG, String.format("frame drawn in %dms (%ffps)", elapsed, 1000f/Math.max(elapsed, 1)));
+          Log.d(TAG, String.format("frame drawn in %dms (%ffps)", elapsed, 1000f / Math.max(elapsed, 1)));
         }
 
         // Reschedule the next redraw
         handler.removeCallbacks(drawCountdown);
-        if (visible && countdownEnabled) {
+        if (visible && preferences.isCountdownEnabled()) {
           handler.postDelayed(drawCountdown, fusionEventTiming.timeToNextTick());
         }
       }
