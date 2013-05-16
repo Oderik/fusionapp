@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            tools:context=".wallpaper.WallpaperSettingsActivity">
+
+  <LinearLayout android:orientation="vertical"
+
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+    <include layout="@layout/countdown_switch"
+             android:id="@+id/enable_countdown"
+             android:layout_margin="@dimen/default_margin"
+             android:layout_width="fill_parent"
+             android:layout_height="wrap_content"
+      />
+
+    <RadioGroup android:id="@+id/themes"
+
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+      <RadioButton android:id="@+id/current"
+                   android:text="@string/current_theme"
+                   android:checked="true"
+
+                   android:layout_margin="@dimen/default_margin"
+                   android:layout_width="fill_parent"
+                   android:layout_height="wrap_content" />
+
+    </RadioGroup>
+  </LinearLayout>
+</ScrollView>

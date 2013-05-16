@@ -37,7 +37,7 @@ public class FusionEventTiming {
    * Update values based on the current system time.
    *
    * @return <code>true</code> if the festival started or ended since last call
-   * (and thus the countdown needs to switch between countdown and festival modes)
+   * (and thus the countdown needs to countdown_switch between countdown and festival modes)
    */
   public boolean update() {
     now = System.currentTimeMillis();

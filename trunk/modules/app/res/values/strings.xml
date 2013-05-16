@@ -26,4 +26,7 @@
   <string name="event_text_festival_start">No time for text - get beer and stuff and go to Turmbühne :o)</string>
   <string name="preferenceSummary_notification">Notifications</string>
   <string name="preferenceTitle_notification">Show further notifications, so you dont miss important dates of the fusion</string>
+  <string name="current_theme">Current</string>
+  <string name="label_theme_2012">2012</string>
+  <string name="label_theme_2013">2013</string>
 </resources>
