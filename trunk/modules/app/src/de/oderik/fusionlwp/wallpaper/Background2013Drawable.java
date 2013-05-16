@@ -32,6 +32,7 @@ public class Background2013Drawable extends LiveBackgroundDrawable {
     super(resources);
 
     final TypedArray typedArray = resources.obtainTypedArray(R.array.parallax_layers_2013);
+    assert typedArray != null;
     parallaxLayerResourceIds = new int[typedArray.length()];
     for (int i = 0; i < typedArray.length(); i++) {
       parallaxLayerResourceIds[i] = typedArray.getResourceId(i, -1);
@@ -63,19 +64,19 @@ public class Background2013Drawable extends LiveBackgroundDrawable {
     if (parallaxLayers != null) {
       for (int i = 0; i < parallaxLayers.length; i++) {
         final Bitmap layer = parallaxLayers[i];
-        final float left = calculateLayerPosition(getBounds().width(), getSurfaceWidth(), layer.getWidth(), offsetsHolder.getHorizontals(), parallaxLayers.length, i);
-        final float top = calculateLayerPosition(getBounds().height(), getSurfaceHeight(), layer.getHeight(), offsetsHolder.getVerticals(), parallaxLayers.length, i);
+        final float left = calculateLayerPosition(getBounds().width(), getVirtualWidth(), layer.getWidth(), offsetsHolder.getHorizontals(), parallaxLayers.length, i);
+        final float top = calculateLayerPosition(getBounds().height(), getVirtualHeight(), layer.getHeight(), offsetsHolder.getVerticals(), parallaxLayers.length, i);
         canvas.drawBitmap(layer, left, top, paint);
       }
     }
   }
 
-  private float calculateLayerPosition(final int wallpaperSize, final int surfaceSize, final int layerSize,
+  private float calculateLayerPosition(final int size, final int virtualSize, final int layerSize,
                                        final OffsetsHolder.DimensionValues dimensionValues,
                                        final int layerCount, final int i) {
-    final float centerOffset = (surfaceSize - layerSize) / 2f;
+    final float centerOffset = (size - layerSize) / 2f;
     if (dimensionValues.getStep() > 0 && dimensionValues.getStep() < 1) {
-      return centerOffset + (.5f - dimensionValues.getOffset()) * (wallpaperSize - layerSize) * (layerCount - i) / (layerCount) * MAX_PARALLAX_SCROLL;
+      return centerOffset + (.5f - dimensionValues.getOffset()) * (virtualSize - layerSize) * (layerCount - i) / (layerCount) * MAX_PARALLAX_SCROLL;
     } else {
       return centerOffset;
     }
@@ -83,6 +84,12 @@ public class Background2013Drawable extends LiveBackgroundDrawable {
 
   @Override
   protected void onBoundsChange(final Rect bounds) {
+    final android.graphics.BitmapFactory.Options options = new android.graphics.BitmapFactory.Options();
+    options.inSampleSize = Math.max(intrinsicParallaxWidth / bounds.width(), intrinsicParallaxHeight / bounds.height());
+
+    for (int i = 0; i < parallaxLayerResourceIds.length; i++) {
+      parallaxLayers[i] = BitmapFactory.decodeResource(resources, parallaxLayerResourceIds[i], options);
+    }
   }
 
   @Override
@@ -90,15 +97,5 @@ public class Background2013Drawable extends LiveBackgroundDrawable {
     offsetsHolder.set(xOffset, yOffset, xStep, yStep, xPixels, yPixels);
 
     invalidateSelf();
-  }
-
-  @Override
-  protected void onSurfaceSizeChanged(final int width, final int height) {
-    final android.graphics.BitmapFactory.Options options = new android.graphics.BitmapFactory.Options();
-    options.inSampleSize = Math.max(intrinsicParallaxWidth / width, intrinsicParallaxHeight / height);
-
-    for (int i = 0; i < parallaxLayerResourceIds.length; i++) {
-      parallaxLayers[i] = BitmapFactory.decodeResource(resources, parallaxLayerResourceIds[i], options);
-    }
   }
 }
