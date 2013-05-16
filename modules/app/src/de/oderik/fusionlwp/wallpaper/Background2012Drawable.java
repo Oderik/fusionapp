@@ -38,7 +38,7 @@ public class Background2012Drawable extends LiveBackgroundDrawable {
   private void updateBackgroundBitmap(final int width, final int height) {
     if (width > 0 && height > 0) {
       final Drawable backgroundDrawable = resources.getDrawable(R.drawable.background_2012);
-      backgroundDrawable.setBounds(0, 0, width - 1, height - 1);
+      backgroundDrawable.setBounds(0, 0, width, height);
       for (backgroundBitmapScale = 1; backgroundBitmapScale <= 4; backgroundBitmapScale++) {
         if (backgroundBitmap != null) {
           backgroundBitmap.recycle();
@@ -61,10 +61,11 @@ public class Background2012Drawable extends LiveBackgroundDrawable {
     }
   }
 
+
   @Override
-  protected void onBoundsChange(final Rect bounds) {
-    super.onBoundsChange(bounds);
-    updateBackgroundBitmap(bounds.width(), bounds.height());
+  protected void onVirtualSizeChanged(final int width, final int height) {
+    super.onVirtualSizeChanged(width, height);
+    updateBackgroundBitmap(width, height);
   }
 
   @Override

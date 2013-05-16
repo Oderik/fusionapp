@@ -12,8 +12,9 @@ import android.graphics.drawable.Drawable;
 public abstract class LiveWallpaperDrawable extends Drawable {
 
   protected final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-  private int surfaceWidth = 0;
-  private int surfaceHeight = 0;
+  private int virtualWidth = 0;
+  private int virtualHeight = 0;
+  private boolean virtualSizeSet;
 
   @Override
   public void setAlpha(final int alpha) {
@@ -46,23 +47,25 @@ public abstract class LiveWallpaperDrawable extends Drawable {
 
   }
 
-  public final void setSurfaceSize(final int width, final int height) {
-    if (width != surfaceWidth || height != surfaceHeight) {
-      surfaceWidth = width;
-      surfaceHeight = height;
+  public final void setVirtualSize(final int width, final int height) {
+    if (width != virtualWidth || height != virtualHeight) {
+      virtualWidth = width;
+      virtualHeight = height;
 
-      onSurfaceSizeChanged(width, height);
+      onVirtualSizeChanged(width, height);
     }
   }
 
-  protected int getSurfaceHeight() {
-    return surfaceHeight;
+  protected int getVirtualHeight() {
+    return virtualHeight;
   }
 
-  protected int getSurfaceWidth() {
-    return surfaceWidth;
+  protected int getVirtualWidth() {
+    return virtualWidth;
   }
 
-  protected void onSurfaceSizeChanged(final int width, final int height) {
+  @SuppressWarnings("UnusedParameters")
+  protected void onVirtualSizeChanged(final int width, final int height) {
   }
+
 }
