@@ -34,7 +34,7 @@ public class CountdownDrawable extends Drawable {
     backgroundDrawable = resources.getDrawable(theme.countdownPanel);
 
     textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    textPaint.setColor(DEFAULT_TEXT_COLOR);
+    textPaint.setColor(resources.getColor(theme.countdownColor));
     textPaint.setStyle(Paint.Style.FILL);
 
     textPaint.setTextSize(resources.getDimension(R.dimen.countdownTextSize));

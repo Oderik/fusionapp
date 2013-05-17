@@ -15,6 +15,7 @@ public enum EventTheme {
           R.drawable.countdown_panel_2012,
           R.drawable.background_2012,
           R.string.label_theme_2012,
+          R.color.countdown_text_color_2012,
           new LiveWallpaperDrawableFactory() {
             @Override
             public LiveWallpaperDrawable create(final Resources resources) {
@@ -26,30 +27,32 @@ public enum EventTheme {
           R.drawable.countdown_panel_2013,
           R.drawable.background_2013,
           R.string.label_theme_2013,
+          R.color.countdown_text_color_2013,
           new LiveWallpaperDrawableFactory() {
             @Override
             public LiveWallpaperDrawable create(final Resources resources) {
               return new Background2013Drawable(resources);
             }
           });
-
   public final int countdownPanel;
   public final int backgroundDrawable;
   public final int labelString;
+  public final int countdownColor;
   public final LiveWallpaperDrawableFactory wallpaperFactory;
 
-  private EventTheme(final int countdownPanel, final int background, final int label, final LiveWallpaperDrawableFactory factory) {
+  private EventTheme(final int countdownPanel, final int background, final int label, final int countdownColor, final LiveWallpaperDrawableFactory factory) {
     this.countdownPanel = countdownPanel;
     backgroundDrawable = background;
     labelString = label;
+    this.countdownColor = countdownColor;
     wallpaperFactory = factory;
-  }
-
-  public interface LiveWallpaperDrawableFactory {
-    LiveWallpaperDrawable create(final Resources resources);
   }
 
   public static EventTheme noNull(final EventTheme eventTheme) {
     return eventTheme == null ? FUSION_2013 : eventTheme;
+  }
+
+  public interface LiveWallpaperDrawableFactory {
+    LiveWallpaperDrawable create(final Resources resources);
   }
 }
