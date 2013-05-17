@@ -8,4 +8,8 @@
   </array>
 
   <color name="countdown_background_2013">#e25235</color>
+  <color name="panel_background_2013">#fff</color>
+  <color name="countdown_text_color_2013">@color/panel_background_2013</color>
+
+  <dimen name="countdown_vertical_padding_2013">15dp</dimen>
 </resources>
