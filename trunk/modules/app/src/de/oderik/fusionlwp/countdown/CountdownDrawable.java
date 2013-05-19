@@ -33,14 +33,16 @@ public class CountdownDrawable extends Drawable {
 
     backgroundDrawable = resources.getDrawable(theme.countdownPanel);
 
+    final int color = resources.getColor(theme.countdownColor);
+
     textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    textPaint.setColor(resources.getColor(theme.countdownColor));
+    textPaint.setColor(color);
     textPaint.setStyle(Paint.Style.FILL);
 
     textPaint.setTextSize(resources.getDimension(R.dimen.countdownTextSize));
 
     boxPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    boxPaint.setColor(DEFAULT_TEXT_COLOR);
+    boxPaint.setColor(color);
     boxPaint.setStyle(Paint.Style.STROKE);
 
     updateBoxSize();
