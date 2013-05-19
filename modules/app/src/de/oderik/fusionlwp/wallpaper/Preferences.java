@@ -110,7 +110,7 @@ public class Preferences implements SharedPreferences.OnSharedPreferenceChangeLi
     this.countdownEnabled = countdownEnabled;
   }
 
-  interface OnPreferencesChangedListener {
+  public interface OnPreferencesChangedListener {
     void onPreferencesChanged(Preferences preferences);
   }
 }

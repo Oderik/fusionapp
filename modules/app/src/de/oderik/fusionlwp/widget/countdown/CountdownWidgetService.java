@@ -18,6 +18,8 @@ import de.oderik.fusionlwp.BuildConfig;
 import de.oderik.fusionlwp.countdown.CountdownDrawable;
 import de.oderik.fusionlwp.countdown.FusionEventTiming;
 import de.oderik.fusionlwp.R;
+import de.oderik.fusionlwp.theme.EventTheme;
+import de.oderik.fusionlwp.wallpaper.Preferences;
 
 import java.util.Arrays;
 
@@ -43,6 +45,7 @@ public class CountdownWidgetService extends Service {
   private Intent            intent;
   private boolean           tickerRunning     = false;
   private FusionEventTiming fusionEventTiming = new FusionEventTiming();
+  private Preferences preferences;
 
   public IBinder onBind(Intent intent) {
     return null;
@@ -138,13 +141,32 @@ public class CountdownWidgetService extends Service {
   @Override
   public void onCreate() {
     super.onCreate();
-    final Typeface antonTypeface = Typeface.createFromAsset(getAssets(), "Anton.ttf");
-    countdownDrawable = new CountdownDrawable(this, fusionEventTiming, de.oderik.fusionlwp.theme.EventTheme.FUSION_2013);
-    countdownDrawable.setTypeface(antonTypeface);
-    countdownDrawable.setBounds(0, 0, countdownDrawable.getIntrinsicWidth() - 1, countdownDrawable.getIntrinsicHeight() - 1);
-    bitmap = Bitmap.createBitmap(countdownDrawable.getIntrinsicWidth(), countdownDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-    canvas = new Canvas(bitmap);
+    preferences = new Preferences(this);
+    canvas = new Canvas();
+    updateCountdownDrawable();
+    preferences.setOnPreferencesChangedListener(new Preferences.OnPreferencesChangedListener() {
+      @Override
+      public void onPreferencesChanged(final Preferences preferences) {
+        updateCountdownDrawable();
+      }
+    });
     intent = createTickIntent(this);
+  }
+
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+    preferences.setOnPreferencesChangedListener(null);
+    preferences = null;
+  }
+
+  private void updateCountdownDrawable() {
+    final Typeface antonTypeface = Typeface.createFromAsset(getAssets(), "Anton.ttf");
+    countdownDrawable = new CountdownDrawable(this, fusionEventTiming, EventTheme.noNull(preferences.getEventTheme()));
+    countdownDrawable.setTypeface(antonTypeface);
+    countdownDrawable.setBounds(0, 0, countdownDrawable.getIntrinsicWidth(), countdownDrawable.getIntrinsicHeight());
+    bitmap = Bitmap.createBitmap(countdownDrawable.getIntrinsicWidth(), countdownDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+    canvas.setBitmap(bitmap);
   }
 
   private AppWidgetManager getAppWidgetManager() {
