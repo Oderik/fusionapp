@@ -9,11 +9,11 @@ Die Homepage für das Festival 2013 ist online. Ich werde die neuen Features bei
 So, Testversion veröffentlicht. Ich hoffe, dass es die ein oder andere Rückmeldung geben wird.
 
 Enthalten ist folgendes:
-* Design der Homepage 2013 für das Wallpaper und den Countdown
-* Über die Einsellungen des Wallpapers kann man zwischen den Designs 2012, 2013 und "dem aktuellen Design" wählen.
-* Die Voreinstellung für das Design ist das aktuelle Design. Bei einem Update oder eine Neuinstallation wird also stets das aktuelle Design angezeigt.
+  * Design der Homepage 2013 für das Wallpaper und den Countdown
+  * Über die Einsellungen des Wallpapers kann man zwischen den Designs 2012, 2013 und "dem aktuellen Design" wählen.
+  * Die Voreinstellung für das Design ist das aktuelle Design. Bei einem Update oder eine Neuinstallation wird also stets das aktuelle Design angezeigt.
 
 Nun warte ich auf Fehlerberichte von Testnutzern. Außerdem müssen noch angepasst werden:
-* die Countdown-Widget-Vorschau,
-* das Design des Willkommens-Screens
-* der Auftritt im Playstore.
+  * die Countdown-Widget-Vorschau,
+  * das Design des Willkommens-Screens
+  * der Auftritt im Playstore.
