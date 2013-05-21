@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
 import android.widget.TextView;
+import de.oderik.fusionlwp.wallpaper.Background2013Drawable;
 
 /**
  * Created: 25.05.12
@@ -18,6 +19,9 @@ public class WelcomeActivity extends Activity implements View.OnClickListener {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.welcome);
+
+    findViewById(android.R.id.content).setBackgroundDrawable(new Background2013Drawable(getResources()));
+
     final TextView welcomeText = (TextView) findViewById(R.id.welcomeText);
     if (welcomeText != null) {
       welcomeText.setTypeface(Typeface.createFromAsset(getAssets(), "Anton.ttf"));

@@ -13,7 +13,6 @@ import de.oderik.fusionlwp.wallpaper.LiveWallpaperDrawable;
 public enum EventTheme {
   FUSION_2012(
           R.drawable.countdown_panel_2012,
-          R.drawable.background_2012,
           R.string.label_theme_2012,
           R.color.countdown_text_color_2012,
           new LiveWallpaperDrawableFactory() {
@@ -25,7 +24,6 @@ public enum EventTheme {
 
   FUSION_2013(
           R.drawable.countdown_panel_2013,
-          R.drawable.background_2013,
           R.string.label_theme_2013,
           R.color.countdown_text_color_2013,
           new LiveWallpaperDrawableFactory() {
@@ -35,14 +33,12 @@ public enum EventTheme {
             }
           });
   public final int countdownPanel;
-  public final int backgroundDrawable;
   public final int labelString;
   public final int countdownColor;
   public final LiveWallpaperDrawableFactory wallpaperFactory;
 
-  private EventTheme(final int countdownPanel, final int background, final int label, final int countdownColor, final LiveWallpaperDrawableFactory factory) {
+  private EventTheme(final int countdownPanel, final int label, final int countdownColor, final LiveWallpaperDrawableFactory factory) {
     this.countdownPanel = countdownPanel;
-    backgroundDrawable = background;
     labelString = label;
     this.countdownColor = countdownColor;
     wallpaperFactory = factory;
