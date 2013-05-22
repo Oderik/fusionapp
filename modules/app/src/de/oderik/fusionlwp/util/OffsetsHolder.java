@@ -30,6 +30,15 @@ public class OffsetsHolder {
     this.yPixels = yPixels;
   }
 
+  public void set(final OffsetsHolder source) {
+    this.xOffset = source.xOffset;
+    this.yOffset = source.yOffset;
+    this.xStep = source.xStep;
+    this.yStep = source.yStep;
+    this.xPixels = source.xPixels;
+    this.yPixels = source.yPixels;
+  }
+
   public DimensionValues getHorizontals() {
     return new HorizontalDimensionValues();
   }
