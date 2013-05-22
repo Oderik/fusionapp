@@ -24,6 +24,7 @@ public class Background2013Drawable extends LiveBackgroundDrawable {
   private final Bitmap[] parallaxLayers;
   private final Paint backgroundPaint = new Paint();
   private final OffsetsHolder offsetsHolder = new OffsetsHolder();
+  private final OffsetsHolder offsetsHolderSnapshot = new OffsetsHolder();
   private final int intrinsicParallaxWidth;
   private final int intrinsicParallaxHeight;
 
@@ -56,19 +57,20 @@ public class Background2013Drawable extends LiveBackgroundDrawable {
   @Override
   public void draw(final Canvas canvas) {
     synchronized (offsetsHolder) {
-      canvas.save();
-      canvas.translate(offsetsHolder.getxPixels(), offsetsHolder.getyPixels());
-      canvas.drawPaint(backgroundPaint);
-      canvas.restore();
+      offsetsHolderSnapshot.set(offsetsHolder);
+    }
+    canvas.save();
+    canvas.translate(offsetsHolder.getxPixels(), offsetsHolder.getyPixels());
+    canvas.drawPaint(backgroundPaint);
+    canvas.restore();
 
-      final Rect bounds = getBounds();
-      if (!bounds.isEmpty()) {
-        for (int i = 0; i < parallaxLayers.length; i++) {
-          final Bitmap layer = parallaxLayers[i];
-          final float left = calculateLayerPosition(bounds.width(), getVirtualWidth(), layer.getWidth(), offsetsHolder.getHorizontals(), parallaxLayers.length, i);
-          final float top = calculateLayerPosition(bounds.height(), getVirtualHeight(), layer.getHeight(), offsetsHolder.getVerticals(), parallaxLayers.length, i);
-          canvas.drawBitmap(layer, left, top, paint);
-        }
+    final Rect bounds = getBounds();
+    if (!bounds.isEmpty()) {
+      for (int i = 0; i < parallaxLayers.length; i++) {
+        final Bitmap layer = parallaxLayers[i];
+        final float left = calculateLayerPosition(bounds.width(), getVirtualWidth(), layer.getWidth(), offsetsHolder.getHorizontals(), parallaxLayers.length, i);
+        final float top = calculateLayerPosition(bounds.height(), getVirtualHeight(), layer.getHeight(), offsetsHolder.getVerticals(), parallaxLayers.length, i);
+        canvas.drawBitmap(layer, left, top, paint);
       }
     }
   }
@@ -122,7 +124,7 @@ public class Background2013Drawable extends LiveBackgroundDrawable {
   protected void onOffsetsChanged(final float xOffset, final float yOffset, final float xStep, final float yStep, final int xPixels, final int yPixels) {
     synchronized (offsetsHolder) {
       offsetsHolder.set(xOffset, yOffset, xStep, yStep, xPixels, yPixels);
-      invalidateSelf();
     }
+    invalidateSelf();
   }
 }
