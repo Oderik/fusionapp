@@ -61,11 +61,12 @@ public class Background2013Drawable extends LiveBackgroundDrawable {
       canvas.drawPaint(backgroundPaint);
       canvas.restore();
 
-      if (parallaxLayers != null) {
+      final Rect bounds = getBounds();
+      if (!bounds.isEmpty()) {
         for (int i = 0; i < parallaxLayers.length; i++) {
           final Bitmap layer = parallaxLayers[i];
-          final float left = calculateLayerPosition(getBounds().width(), getVirtualWidth(), layer.getWidth(), offsetsHolder.getHorizontals(), parallaxLayers.length, i);
-          final float top = calculateLayerPosition(getBounds().height(), getVirtualHeight(), layer.getHeight(), offsetsHolder.getVerticals(), parallaxLayers.length, i);
+          final float left = calculateLayerPosition(bounds.width(), getVirtualWidth(), layer.getWidth(), offsetsHolder.getHorizontals(), parallaxLayers.length, i);
+          final float top = calculateLayerPosition(bounds.height(), getVirtualHeight(), layer.getHeight(), offsetsHolder.getVerticals(), parallaxLayers.length, i);
           canvas.drawBitmap(layer, left, top, paint);
         }
       }
@@ -88,29 +89,31 @@ public class Background2013Drawable extends LiveBackgroundDrawable {
     final int width = bounds.width();
     final int height = bounds.height();
 
-    final Options options = new Options();
-    options.inSampleSize = Math.max(intrinsicParallaxWidth / width, intrinsicParallaxHeight / height);
+    if (width > 0 && height > 0) {
+      final Options options = new Options();
+      options.inSampleSize = Math.max(intrinsicParallaxWidth / width, intrinsicParallaxHeight / height);
 
-    final float scale = Math.min((float) options.inSampleSize * width / intrinsicParallaxWidth, (float) options.inSampleSize * height / intrinsicParallaxHeight);
+      final float scale = Math.min((float) options.inSampleSize * width / intrinsicParallaxWidth, (float) options.inSampleSize * height / intrinsicParallaxHeight);
 
-    if (BuildConfig.DEBUG) {
-      Log.d(TAG, "Reloading resources with sample size of " + options.inSampleSize + ", scaling " + scale);
-    }
-
-    final Matrix matrix = new Matrix();
-    matrix.setScale(scale, scale);
-
-    for (int i = 0; i < parallaxLayerResourceIds.length; i++) {
-      if (parallaxLayers[i] != null) {
-        parallaxLayers[i].recycle();
+      if (BuildConfig.DEBUG) {
+        Log.d(TAG, "Reloading resources with sample size of " + options.inSampleSize + ", scaling " + scale);
       }
-      parallaxLayers[i] = BitmapFactory.decodeResource(resources, parallaxLayerResourceIds[i], options);
 
-      if (scale < 1) {
-        final Bitmap scaledLayer = Bitmap.createBitmap((int) (parallaxLayers[i].getWidth() * scale), (int) (parallaxLayers[i].getHeight() * scale), Bitmap.Config.ARGB_8888);
-        new Canvas(scaledLayer).drawBitmap(parallaxLayers[i], matrix, new Paint(Paint.FILTER_BITMAP_FLAG | Paint.ANTI_ALIAS_FLAG));
-        parallaxLayers[i].recycle();
-        parallaxLayers[i] = scaledLayer;
+      final Matrix matrix = new Matrix();
+      matrix.setScale(scale, scale);
+
+      for (int i = 0; i < parallaxLayerResourceIds.length; i++) {
+        if (parallaxLayers[i] != null) {
+          parallaxLayers[i].recycle();
+        }
+        parallaxLayers[i] = BitmapFactory.decodeResource(resources, parallaxLayerResourceIds[i], options);
+
+        if (scale < 1) {
+          final Bitmap scaledLayer = Bitmap.createBitmap((int) (parallaxLayers[i].getWidth() * scale), (int) (parallaxLayers[i].getHeight() * scale), Bitmap.Config.ARGB_8888);
+          new Canvas(scaledLayer).drawBitmap(parallaxLayers[i], matrix, new Paint(Paint.FILTER_BITMAP_FLAG | Paint.ANTI_ALIAS_FLAG));
+          parallaxLayers[i].recycle();
+          parallaxLayers[i] = scaledLayer;
+        }
       }
     }
   }
