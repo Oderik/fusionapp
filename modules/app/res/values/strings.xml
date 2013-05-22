@@ -2,12 +2,12 @@
 <resources>
   <string name="app_name">Фузион Countdown</string>
   <string name="descriptionWidget">Fusion Countdown</string>
-  <string name="lwp_description">The literal wallpaper of the current Fusion Festival homepage including an optional countdown.</string>
+  <string name="lwp_description">The wallpapers of the Fusion Festival homepage including an optional countdown.</string>
   <string name="label_bannerWidget">Fusion Banner</string>
   <string name="label_countdownWidget">Fusion Countdown</string>
   <string name="label_logoWidget">Fusion Logo</string>
   <string name="hint_moveCountdown">You can drag the countdown around!</string>
-  <string name="label_wallpaper">Fusion wallpaper</string>
+  <string name="label_wallpaper">Fusion Festival</string>
   <string name="preferenceScreenTitle_wallpaper">Fusion wallpaper preferences</string>
   <string name="preferenceTitle_countdown">Countdown</string>
   <string name="preferenceSummary_countdown">Show the countdown on the wallpaper?\nBy the way, you can drag it around!</string>

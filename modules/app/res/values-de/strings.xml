@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="descriptionWidget">Fusion Countdown</string>
-  <string name="lwp_description">Die Tapete der aktuellen Homepage des Fusion Festivals, auf Wunsch mit Countdown.</string>
+  <string name="lwp_description">Die Hintergründ der Homepage des Fusion Festivals, auf Wunsch mit Countdown.</string>
   <string name="hint_moveCountdown">Du kannst den Countdown verschieben!</string>
-  <string name="label_wallpaper">Fusiontapete</string>
+  <string name="label_wallpaper">Fusion Festival</string>
   <string name="preferenceScreenTitle_wallpaper">Einstellungen Fusiontapete</string>
   <string name="preferenceTitle_countdown">Countdown</string>
   <string name="preferenceSummary_countdown">Soll der Countdown auf der Tapete angezeigt werden?\nMan kann ihn übrigens verschieben!</string>
