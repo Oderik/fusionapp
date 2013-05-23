@@ -104,7 +104,7 @@ public class FusionWallpaperService extends WallpaperService {
       if (backgroundDrawable != null) {
         backgroundDrawable.setCallback(null);
       }
-      backgroundDrawable = EventTheme.noNull(preferences.getEventTheme()).wallpaperFactory.create(getResources());
+      backgroundDrawable = EventTheme.noNull(preferences.getEventTheme()).wallpaperFactory.create(FusionWallpaperService.this);
       backgroundDrawable.setCallback(drawableCallback);
     }
 
