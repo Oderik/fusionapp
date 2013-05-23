@@ -2,8 +2,10 @@
 
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
                     android:previewImage="@drawable/sidebar_logo_2012"
-                    android:resizeMode="none"
-                    android:minWidth="@dimen/logoWidth"
-                    android:minHeight="@dimen/logoHeight"
+                    android:resizeMode="horizontal|vertical"
+                    android:minWidth="132dp"
+                    android:minHeight="132dp"
+                    android:minResizeWidth="110dp"
+                    android:minResizeHeight="40dp"
                     android:initialLayout="@layout/logo_widget_2012"
                     android:updatePeriodMillis="0"/>

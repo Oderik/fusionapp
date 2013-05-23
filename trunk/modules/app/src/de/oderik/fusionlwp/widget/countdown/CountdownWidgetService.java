@@ -7,9 +7,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Typeface;
+import android.graphics.*;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.util.Log;
@@ -67,6 +65,7 @@ public class CountdownWidgetService extends Service {
         stopTicker();
       }
       if (powerManager.isScreenOn()) {
+        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         countdownDrawable.draw(canvas);
         final RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.countdown_widget);
         remoteViews.setImageViewBitmap(R.id.countdown, bitmap);

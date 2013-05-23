@@ -2,8 +2,11 @@
 
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
                     android:previewImage="@drawable/countdown_preview"
-                    android:resizeMode="none"
-                    android:minWidth="@dimen/countdownWidth"
-                    android:minHeight="@dimen/countdownHeight"
+                    android:resizeMode="vertical|horizontal"
+                    android:minWidth="@dimen/countdownWidgetWidth"
+                    android:minHeight="@dimen/countdownWidgetHeight"
+                    android:widgetCategory="home_screen|keyguard"
+                    android:minResizeHeight="@dimen/countdownWidth"
+                    android:minResizeWidth="@dimen/countdownHeight"
                     android:initialLayout="@layout/countdown_widget"
                     android:updatePeriodMillis="0"/>

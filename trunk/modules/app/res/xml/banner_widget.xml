@@ -2,8 +2,10 @@
 
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
                     android:previewImage="@drawable/logo_mobile_content_2012"
-                    android:resizeMode="none"
-                    android:minWidth="@dimen/bannerWidth"
-                    android:minHeight="@dimen/bannerHeight"
+                    android:resizeMode="horizontal|vertical"
+                    android:minWidth="240dp"
+                    android:minHeight="40dp"
+                    android:minResizeWidth="110dp"
+                    android:minResizeHeight="34dp"
                     android:initialLayout="@layout/banner_widget_2012"
                     android:updatePeriodMillis="0"/>
