@@ -1,5 +1,6 @@
 package de.oderik.fusionlwp.wallpaper;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.*;
@@ -28,10 +29,11 @@ public class Background2013Drawable extends LiveBackgroundDrawable {
   private final int intrinsicParallaxWidth;
   private final int intrinsicParallaxHeight;
 
-  public Background2013Drawable(final Resources resources) {
-    super(resources);
+  public Background2013Drawable(final Context context) {
+    super(context.getResources());
 
-    final TypedArray typedArray = resources.obtainTypedArray(R.array.parallax_layers_2013);
+    final Resources resources1 = context.getResources();
+    final TypedArray typedArray = resources1.obtainTypedArray(R.array.parallax_layers_2013);
     assert typedArray != null;
     parallaxLayerResourceIds = new int[typedArray.length()];
     for (int i = 0; i < typedArray.length(); i++) {
@@ -41,7 +43,7 @@ public class Background2013Drawable extends LiveBackgroundDrawable {
 
     parallaxLayers = new Bitmap[parallaxLayerResourceIds.length];
 
-    final Drawable backgroundDrawable = resources.getDrawable(R.drawable.bg_2013);
+    final Drawable backgroundDrawable = resources1.getDrawable(R.drawable.bg_2013);
     if (backgroundDrawable instanceof BitmapDrawable) {
       backgroundPaint.setStyle(Paint.Style.FILL);
       backgroundPaint.setShader(new BitmapShader(((BitmapDrawable) backgroundDrawable).getBitmap(), Shader.TileMode.REPEAT, Shader.TileMode.REPEAT));
@@ -49,7 +51,7 @@ public class Background2013Drawable extends LiveBackgroundDrawable {
 
     final Options options = new Options();
     options.inJustDecodeBounds = true;
-    BitmapFactory.decodeResource(resources, R.drawable.rakete_2013, options);
+    BitmapFactory.decodeResource(resources1, R.drawable.rakete_2013, options);
     intrinsicParallaxWidth = options.outWidth;
     intrinsicParallaxHeight = options.outHeight;
   }

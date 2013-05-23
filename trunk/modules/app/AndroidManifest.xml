@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="de.oderik.fusionlwp"
-          android:versionCode="14"
-          android:versionName="2013 v4">
+          android:versionCode="15"
+          android:versionName="2013 v5">
 
   <uses-sdk android:minSdkVersion="7"
             android:targetSdkVersion="17" />

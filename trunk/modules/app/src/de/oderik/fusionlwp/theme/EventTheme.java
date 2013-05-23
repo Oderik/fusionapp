@@ -1,6 +1,6 @@
 package de.oderik.fusionlwp.theme;
 
-import android.content.res.Resources;
+import android.content.Context;
 import de.oderik.fusionlwp.R;
 import de.oderik.fusionlwp.wallpaper.Background2012Drawable;
 import de.oderik.fusionlwp.wallpaper.Background2013Drawable;
@@ -17,8 +17,8 @@ public enum EventTheme {
           R.color.countdown_text_color_2012,
           new LiveWallpaperDrawableFactory() {
             @Override
-            public LiveWallpaperDrawable create(final Resources resources) {
-              return new Background2012Drawable(resources);
+            public LiveWallpaperDrawable create(final Context context) {
+              return new Background2012Drawable(context);
             }
           }),
 
@@ -28,8 +28,8 @@ public enum EventTheme {
           R.color.countdown_text_color_2013,
           new LiveWallpaperDrawableFactory() {
             @Override
-            public LiveWallpaperDrawable create(final Resources resources) {
-              return new Background2013Drawable(resources);
+            public LiveWallpaperDrawable create(final Context context) {
+              return new Background2013Drawable(context);
             }
           });
   public final int countdownPanel;
@@ -49,6 +49,6 @@ public enum EventTheme {
   }
 
   public interface LiveWallpaperDrawableFactory {
-    LiveWallpaperDrawable create(final Resources resources);
+    LiveWallpaperDrawable create(final Context context);
   }
 }

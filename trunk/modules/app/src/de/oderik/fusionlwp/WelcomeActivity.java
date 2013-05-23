@@ -20,7 +20,7 @@ public class WelcomeActivity extends Activity implements View.OnClickListener {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.welcome);
 
-    findViewById(android.R.id.content).setBackgroundDrawable(new Background2013Drawable(getResources()));
+    findViewById(android.R.id.content).setBackgroundDrawable(new Background2013Drawable(this));
 
     final TextView welcomeText = (TextView) findViewById(R.id.welcomeText);
     if (welcomeText != null) {

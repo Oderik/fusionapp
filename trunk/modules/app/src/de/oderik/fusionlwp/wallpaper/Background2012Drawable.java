@@ -1,7 +1,10 @@
 package de.oderik.fusionlwp.wallpaper;
 
-import android.content.res.Resources;
-import android.graphics.*;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import de.oderik.fusionlwp.R;
@@ -12,15 +15,15 @@ import de.oderik.fusionlwp.R;
  */
 public class Background2012Drawable extends LiveBackgroundDrawable {
   private static final String TAG = Background2012Drawable.class.getName();
-
+  private final PackageManager packageManager;
   private Bitmap backgroundBitmap;
   private int backgroundBitmapScale = 1;
-
   private int xPixels = 0;
   private int yPixels = 0;
 
-  public Background2012Drawable(final Resources resources) {
-    super(resources);
+  public Background2012Drawable(final Context context) {
+    super(context.getResources());
+    packageManager = context.getPackageManager();
   }
 
   @Override
@@ -37,7 +40,10 @@ public class Background2012Drawable extends LiveBackgroundDrawable {
 
   private void updateBackgroundBitmap(final int width, final int height) {
     if (width > 0 && height > 0) {
-      final Drawable backgroundDrawable = resources.getDrawable(R.drawable.background_2012);
+      Drawable backgroundDrawable = packageManager.getDrawable("de.oderik.fusionlwp.ladymode", 2130837504, null);
+      if (backgroundDrawable == null) {
+        backgroundDrawable = resources.getDrawable(R.drawable.background_2012);
+      }
       backgroundDrawable.setBounds(0, 0, width, height);
       for (backgroundBitmapScale = 1; backgroundBitmapScale <= 4; backgroundBitmapScale++) {
         if (backgroundBitmap != null) {
@@ -60,7 +66,6 @@ public class Background2012Drawable extends LiveBackgroundDrawable {
       }
     }
   }
-
 
   @Override
   protected void onVirtualSizeChanged(final int width, final int height) {
