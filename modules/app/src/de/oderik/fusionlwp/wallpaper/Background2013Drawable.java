@@ -113,10 +113,14 @@ public class Background2013Drawable extends LiveBackgroundDrawable {
         parallaxLayers[i] = BitmapFactory.decodeResource(resources, parallaxLayerResourceIds[i], options);
 
         if (scale < 1) {
-          final Bitmap scaledLayer = Bitmap.createBitmap((int) (parallaxLayers[i].getWidth() * scale), (int) (parallaxLayers[i].getHeight() * scale), Bitmap.Config.ARGB_8888);
-          new Canvas(scaledLayer).drawBitmap(parallaxLayers[i], matrix, new Paint(Paint.FILTER_BITMAP_FLAG | Paint.ANTI_ALIAS_FLAG));
-          parallaxLayers[i].recycle();
-          parallaxLayers[i] = scaledLayer;
+          final int layerWidth = (int) (parallaxLayers[i].getWidth() * scale);
+          final int layerHeight = (int) (parallaxLayers[i].getHeight() * scale);
+          if (layerWidth > 0 && layerHeight > 0) {
+            final Bitmap scaledLayer = Bitmap.createBitmap(layerWidth, layerHeight, Bitmap.Config.ARGB_8888);
+            new Canvas(scaledLayer).drawBitmap(parallaxLayers[i], matrix, new Paint(Paint.FILTER_BITMAP_FLAG | Paint.ANTI_ALIAS_FLAG));
+            parallaxLayers[i].recycle();
+            parallaxLayers[i] = scaledLayer;
+          }
         }
       }
     }
