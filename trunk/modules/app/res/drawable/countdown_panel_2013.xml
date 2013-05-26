@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-  <item android:drawable="@drawable/panel_background_2013" />
-  <item>
+    <item android:drawable="@drawable/box_shadow_2013"/>
+    <item android:drawable="@drawable/panel_background_color_2013"/>
+    <item>
     <inset
       android:drawable="@drawable/countdown_background_2013"
 

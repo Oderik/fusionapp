@@ -325,7 +325,11 @@ public class FusionWallpaperService extends WallpaperService {
         } catch (NullPointerException ignored) {
           ignored.printStackTrace();
         } finally {
+            try {
           if (canvas != null) holder.unlockCanvasAndPost(canvas);
+            } catch (Exception e) {
+                Log.w(TAG, "Could not update canvas", e);
+            }
         }
 
         if (BuildConfig.DEBUG) {

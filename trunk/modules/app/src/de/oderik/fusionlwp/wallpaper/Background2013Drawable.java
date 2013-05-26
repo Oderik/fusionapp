@@ -70,9 +70,11 @@ public class Background2013Drawable extends LiveBackgroundDrawable {
     if (!bounds.isEmpty()) {
       for (int i = 0; i < parallaxLayers.length; i++) {
         final Bitmap layer = parallaxLayers[i];
-        final float left = calculateLayerPosition(bounds.width(), getVirtualWidth(), layer.getWidth(), offsetsHolder.getHorizontals(), parallaxLayers.length, i);
-        final float top = calculateLayerPosition(bounds.height(), getVirtualHeight(), layer.getHeight(), offsetsHolder.getVerticals(), parallaxLayers.length, i);
-        canvas.drawBitmap(layer, left, top, paint);
+        if (!layer.isRecycled()) {
+          final float left = calculateLayerPosition(bounds.width(), getVirtualWidth(), layer.getWidth(), offsetsHolder.getHorizontals(), parallaxLayers.length, i);
+          final float top = calculateLayerPosition(bounds.height(), getVirtualHeight(), layer.getHeight(), offsetsHolder.getVerticals(), parallaxLayers.length, i);
+          canvas.drawBitmap(layer, left, top, paint);
+        }
       }
     }
   }
@@ -117,9 +119,11 @@ public class Background2013Drawable extends LiveBackgroundDrawable {
           final int layerHeight = (int) (parallaxLayers[i].getHeight() * scale);
           if (layerWidth > 0 && layerHeight > 0) {
             final Bitmap scaledLayer = Bitmap.createBitmap(layerWidth, layerHeight, Bitmap.Config.ARGB_8888);
-            new Canvas(scaledLayer).drawBitmap(parallaxLayers[i], matrix, new Paint(Paint.FILTER_BITMAP_FLAG | Paint.ANTI_ALIAS_FLAG));
-            parallaxLayers[i].recycle();
-            parallaxLayers[i] = scaledLayer;
+            if (!parallaxLayers[i].isRecycled()) {
+              new Canvas(scaledLayer).drawBitmap(parallaxLayers[i], matrix, new Paint(Paint.FILTER_BITMAP_FLAG | Paint.ANTI_ALIAS_FLAG));
+              parallaxLayers[i].recycle();
+              parallaxLayers[i] = scaledLayer;
+            }
           }
         }
       }
