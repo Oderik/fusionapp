@@ -975,6 +975,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app.iml" filepath="$PROJECT_DIR$/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/appGLExperiments.iml" filepath="$PROJECT_DIR$/appGLExperiments.iml" />
       <module fileurl="file://$PROJECT_DIR$/appLadymode.iml" filepath="$PROJECT_DIR$/appLadymode.iml" />
       <module fileurl="file://$PROJECT_DIR$/java.iml" filepath="$PROJECT_DIR$/java.iml" />
     </modules>
@@ -1079,6 +1080,13 @@
             </SvnBranchConfiguration>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/../../modules/appLadymode">
+          <value>
+            <SvnBranchConfiguration>
+              <option name="trunkUrl" value="" />
+            </SvnBranchConfiguration>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/../../modules/java">
           <value>
             <SvnBranchConfiguration>
@@ -1092,6 +1100,7 @@
   </component>
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="svn" />
+    <mapping directory="$PROJECT_DIR$/../../modules/appGLExperiments" vcs="svn" />
   </component>
   <component name="WebServicesPlugin" addRequiredLibraries="true" />
 </project>
