@@ -13,6 +13,12 @@
         <resOverlayFolders>
           <path>/../../modules/appGLExperiments/res-overlay</path>
         </resOverlayFolders>
+        <notImportedProperties>
+          <property>MANIFEST_FILE_PATH</property>
+          <property>RESOURCES_DIR_PATH</property>
+          <property>ASSETS_DIR_PATH</property>
+          <property>NATIVE_LIBS_DIR_PATH</property>
+        </notImportedProperties>
       </configuration>
     </facet>
   </component>
