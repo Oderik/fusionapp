@@ -17,3 +17,11 @@ Nun warte ich auf Fehlerberichte von Testnutzern. Außerdem müssen noch angepas
   * die Countdown-Widget-Vorschau,
   * das Design des Willkommens-Screens
   * der Auftritt im Playstore.
+
+= 2013-05-29 =
+
+Projekttagebücher sind einfach nicht mein Ding. ;)
+Die genannten Punkte sind soweit umgesetzt. Nun schiebe ich noch ein, zwei Kleinigkeiten vor mir her sowie eine etwas größere Baustelle:
+  * Rendern des LWP mit OpenGL, weil's einfach besser fluppt
+  * Die Schattenumrandung des Countdowns verschwindet manchmal. Heile machen! ;)
+  * Auf manchen Geräten / Launchern scrollen die Parallax-Ebenen nicht.
