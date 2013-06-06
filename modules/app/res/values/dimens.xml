@@ -11,6 +11,11 @@
   <dimen name="calendar_text_size">20sp</dimen>
   <dimen name="default_margin">10dp</dimen>
 
-  <dimen name="countdownWidgetWidth">@dimen/countdownWidth</dimen>
-  <dimen name="countdownWidgetHeight">@dimen/countdownHeight</dimen>
+  <dimen name="countdownWidgetWidth">@dimen/twoWidgetCells</dimen>
+  <dimen name="countdownWidgetHeight">@dimen/oneWidgetCell</dimen>
+
+  <dimen name="oneWidgetCell">40dp</dimen>
+  <dimen name="twoWidgetCells">110dp</dimen>
+  <dimen name="threeWidgetCells">180dp</dimen>
+  <dimen name="fourWidgetCells">250dp</dimen>
 </resources>
