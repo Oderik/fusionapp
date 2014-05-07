@@ -19,6 +19,12 @@ public class FestivalStartEventTest extends EventTest {
     configure(calendar, 2014, MAY, 7, 7);
     assertTimestamp(2014, JUNE, 26, 18, event.getTimestamp());
 
+    configure(calendar, 2014, JULY, 7, 7);
+    assertTimestamp(2015, JUNE, 25, 18, event.getTimestamp());
+
+    configure(calendar, 2016, MAY, 7, 7);
+    assertTimestamp(2016, JUNE, 30, 18, event.getTimestamp());
+
     configure(calendar, 2011, APRIL, 1, 12);
     assertTimestamp(2011, JUNE, 30, 18, event.getTimestamp());
 
