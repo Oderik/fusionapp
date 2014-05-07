@@ -1,5 +1,6 @@
 package de.oderik.fusionlwp.event;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**
@@ -22,10 +23,10 @@ public class FusionEventCalculation {
   public Calendar getFusionCalendarOfYear(final int year) {
     calendar.clear();
     calendar.set(Calendar.YEAR, year);
-    calendar.set(Calendar.MONTH, Calendar.JULY);
-    calendar.set(Calendar.HOUR_OF_DAY, 18);
+    calendar.set(Calendar.MONTH, Calendar.JUNE);
     calendar.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
-    calendar.set(Calendar.DAY_OF_WEEK_IN_MONTH, -Calendar.THURSDAY);
+    calendar.set(Calendar.HOUR_OF_DAY, 18);
+    calendar.set(Calendar.DAY_OF_WEEK_IN_MONTH, -1);
     return calendar;
   }
 }
