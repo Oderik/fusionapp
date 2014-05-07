@@ -1,7 +1,8 @@
 package de.oderik.fusionlwp.event;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
+import static java.util.Calendar.*;
 
 /**
  * @author maik.riechel
@@ -16,17 +17,17 @@ public class FusionEventCalculation {
 
   public Calendar getFusionCalendar(final long now) {
     calendar.setTimeInMillis(now);
-    final int currentYear = calendar.get(Calendar.YEAR);
+    final int currentYear = calendar.get(YEAR);
     return getFusionCalendarOfYear(currentYear);
   }
 
   public Calendar getFusionCalendarOfYear(final int year) {
     calendar.clear();
-    calendar.set(Calendar.YEAR, year);
-    calendar.set(Calendar.MONTH, Calendar.JUNE);
-    calendar.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
-    calendar.set(Calendar.HOUR_OF_DAY, 18);
-    calendar.set(Calendar.DAY_OF_WEEK_IN_MONTH, -1);
+    calendar.set(YEAR, year);
+    calendar.set(MONTH, JUNE);
+    calendar.set(DAY_OF_WEEK, THURSDAY);
+    calendar.set(HOUR_OF_DAY, 18);
+    calendar.set(DAY_OF_WEEK_IN_MONTH, -1);
     return calendar;
   }
 }
