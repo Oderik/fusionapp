@@ -6,7 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/../../modules/java/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../modules/java/test" isTestSource="true" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="JDK" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
       <library>
