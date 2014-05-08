@@ -11,7 +11,7 @@
             <option value="$PROJECT_DIR$/modules" />
             <option value="$PROJECT_DIR$/modules/app" />
             <option value="$PROJECT_DIR$/modules/appLadymode" />
-            <option value="$PROJECT_DIR$/modules/java" />
+            <option value="$PROJECT_DIR$/modules/logic" />
           </set>
         </option>
       </GradleProjectSettings>
