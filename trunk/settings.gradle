@@ -1,1 +1,1 @@
-include ':modules:app', ':modules:java', ':modules:appLadymode'
+include ':modules:app', ':modules:logic', ':modules:appLadymode'
