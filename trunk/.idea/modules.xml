@@ -6,7 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/modules/appLadymode/appLadymode.iml" filepath="$PROJECT_DIR$/modules/appLadymode/appLadymode.iml" />
       <module fileurl="file://$PROJECT_DIR$/fusionapp.iml" filepath="$PROJECT_DIR$/fusionapp.iml" />
       <module fileurl="file://$PROJECT_DIR$/modules/java/java.iml" filepath="$PROJECT_DIR$/modules/java/java.iml" />
-      <module fileurl="file://$PROJECT_DIR$/modules/logic/logic.iml" filepath="$PROJECT_DIR$/modules/logic/logic.iml" />
+      <module fileurl="file://$PROJECT_DIR$/java/logic/logic.iml" filepath="$PROJECT_DIR$/java/logic/logic.iml" />
     </modules>
   </component>
 </project>
