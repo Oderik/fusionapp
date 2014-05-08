@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/modules/app/app.iml" filepath="$PROJECT_DIR$/modules/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/modules/appLadymode/appLadymode.iml" filepath="$PROJECT_DIR$/modules/appLadymode/appLadymode.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android/app/app.iml" filepath="$PROJECT_DIR$/android/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android/appLadymode/appLadymode.iml" filepath="$PROJECT_DIR$/android/appLadymode/appLadymode.iml" />
       <module fileurl="file://$PROJECT_DIR$/fusionapp.iml" filepath="$PROJECT_DIR$/fusionapp.iml" />
       <module fileurl="file://$PROJECT_DIR$/modules/java/java.iml" filepath="$PROJECT_DIR$/modules/java/java.iml" />
       <module fileurl="file://$PROJECT_DIR$/java/logic/logic.iml" filepath="$PROJECT_DIR$/java/logic/logic.iml" />
