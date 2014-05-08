@@ -1,5 +1,7 @@
 package de.oderik.fusionlwp.event;
 
+import java.util.Calendar;
+
 import static java.util.Calendar.*;
 
 /**

@@ -1,1 +1,1 @@
-include ':android:app', ':java:logic', ':android:appLadymode'
+include ':modules:app', ':modules:logic', ':modules:appLadymode'
