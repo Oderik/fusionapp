@@ -40,7 +40,7 @@ public class Background2012Drawable extends LiveBackgroundDrawable {
 
   private void updateBackgroundBitmap(final int width, final int height) {
     if (width > 0 && height > 0) {
-      Drawable backgroundDrawable = packageManager.getDrawable("de.oderik.fusionlwp.ladymode", 2130837504, null);
+      @SuppressWarnings("ResourceType") Drawable backgroundDrawable = packageManager.getDrawable("de.oderik.fusionlwp.ladymode", 2130837504, null);
       if (backgroundDrawable == null) {
         backgroundDrawable = resources.getDrawable(R.drawable.background_2012);
       }

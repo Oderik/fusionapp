@@ -7,12 +7,16 @@ import android.graphics.*;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+
+import java.io.IOException;
+
 import de.oderik.fusionlwp.BuildConfig;
 import de.oderik.fusionlwp.R;
 import de.oderik.fusionlwp.util.BitmapFactory;
 import de.oderik.fusionlwp.util.OffsetsHolder;
 
 import static android.graphics.BitmapFactory.Options;
+import static de.oderik.fusionlwp.util.BitmapFactory.*;
 
 /**
  * @author maik.riechel
@@ -32,8 +36,8 @@ public class Background2013Drawable extends LiveBackgroundDrawable {
   public Background2013Drawable(final Context context) {
     super(context.getResources());
 
-    final Resources resources1 = context.getResources();
-    final TypedArray typedArray = resources1.obtainTypedArray(R.array.parallax_layers_2013);
+    final Resources resources = context.getResources();
+    final TypedArray typedArray = resources.obtainTypedArray(R.array.parallax_layers_2013);
     assert typedArray != null;
     parallaxLayerResourceIds = new int[typedArray.length()];
     for (int i = 0; i < typedArray.length(); i++) {
@@ -43,15 +47,13 @@ public class Background2013Drawable extends LiveBackgroundDrawable {
 
     parallaxLayers = new Bitmap[parallaxLayerResourceIds.length];
 
-    final Drawable backgroundDrawable = resources1.getDrawable(R.drawable.bg_2013);
+    final Drawable backgroundDrawable = resources.getDrawable(R.drawable.bg_2013);
     if (backgroundDrawable instanceof BitmapDrawable) {
       backgroundPaint.setStyle(Paint.Style.FILL);
       backgroundPaint.setShader(new BitmapShader(((BitmapDrawable) backgroundDrawable).getBitmap(), Shader.TileMode.REPEAT, Shader.TileMode.REPEAT));
     }
 
-    final Options options = new Options();
-    options.inJustDecodeBounds = true;
-    BitmapFactory.decodeResource(resources1, R.drawable.rakete_2013, options);
+    final Options options = decodeBounds(new ResourceDecodeStrategy(resources, R.drawable.rakete_2013));
     intrinsicParallaxWidth = options.outWidth;
     intrinsicParallaxHeight = options.outHeight;
   }
@@ -112,7 +114,7 @@ public class Background2013Drawable extends LiveBackgroundDrawable {
         if (parallaxLayers[i] != null) {
           parallaxLayers[i].recycle();
         }
-        parallaxLayers[i] = BitmapFactory.decodeResource(resources, parallaxLayerResourceIds[i], options);
+        parallaxLayers[i] = decodeResource(resources, parallaxLayerResourceIds[i], options);
 
         if (scale < 1) {
           final int layerWidth = (int) (parallaxLayers[i].getWidth() * scale);
