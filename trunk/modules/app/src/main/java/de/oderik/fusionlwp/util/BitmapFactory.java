@@ -2,6 +2,7 @@ package de.oderik.fusionlwp.util;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.Log;
 import de.oderik.fusionlwp.BuildConfig;
@@ -86,4 +87,19 @@ public class BitmapFactory extends android.graphics.BitmapFactory {
       return decodeResource(resources, id, options);
     }
   }
+
+  public static Options decodeBounds(final DecodeStrategy decodeStrategy) {
+    try {
+      return decodeBounds(decodeStrategy, new Options());
+    } catch (IOException e) {
+      throw new RuntimeException("This was unexpected.", e);
+    }
+  }
+
+  private static Options decodeBounds(DecodeStrategy decodeStrategy, Options options) throws IOException {
+    options.inJustDecodeBounds = true;
+    decodeStrategy.decode(options);
+    return options;
+  }
+
 }
