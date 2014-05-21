@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/box_shadow_2013"/>
+    <item android:drawable="@drawable/panel_background_color_2014"/>
+    <item>
+    <inset
+      android:drawable="@drawable/countdown_background_2014"
+
+      android:insetTop="@dimen/countdown_vertical_padding_2013"
+      android:insetBottom="@dimen/countdown_vertical_padding_2013">
+    </inset>
+  </item>
+</layer-list>
