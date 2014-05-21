@@ -29,5 +29,6 @@
   <string name="current_theme">Current</string>
   <string name="label_theme_2012">2012</string>
   <string name="label_theme_2013">2013</string>
+  <string name="label_theme_2014">2014</string>
   <string name="label_rocketWidget">Fusion Rocket</string>
 </resources>

@@ -1,6 +1,5 @@
 package de.oderik.fusionlwp.wallpaper;
 
-import android.app.WallpaperManager;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;
@@ -14,6 +13,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.widget.Toast;
+
 import de.oderik.fusionlwp.BuildConfig;
 import de.oderik.fusionlwp.R;
 import de.oderik.fusionlwp.countdown.CountdownDrawable;
@@ -28,8 +28,6 @@ public class FusionWallpaperService extends WallpaperService {
   public static final String TAG = FusionWallpaperService.class.getName();
 
   private final FusionEventTiming fusionEventTiming = new FusionEventTiming();
-
-  private EventTheme theme = EventTheme.FUSION_2013;
 
   @Override
   public Engine onCreateEngine() {
@@ -202,9 +200,7 @@ public class FusionWallpaperService extends WallpaperService {
     public void onDestroy() {
       handler.removeCallbacks(drawCountdown);
       handler.getLooper().quit();
-      if (preferences != null) {
-        preferences.setOnPreferencesChangedListener(null);
-      }
+      preferences.setOnPreferencesChangedListener(null);
       if (backgroundDrawable != null) {
         backgroundDrawable.setCallback(null);
       }

@@ -31,6 +31,17 @@ public enum EventTheme {
             public LiveWallpaperDrawable create(final Context context) {
               return new Background2013Drawable(context);
             }
+          }),
+
+  FUSION_2014(
+          R.drawable.countdown_panel_2014,
+          R.string.label_theme_2014,
+          R.color.countdown_text_color_2014,
+          new LiveWallpaperDrawableFactory() {
+            @Override
+            public LiveWallpaperDrawable create(final Context context) {
+              return new Background2013Drawable(context);
+            }
           });
   public final int countdownPanel;
   public final int labelString;
@@ -45,7 +56,7 @@ public enum EventTheme {
   }
 
   public static EventTheme noNull(final EventTheme eventTheme) {
-    return eventTheme == null ? FUSION_2013 : eventTheme;
+    return eventTheme == null ? FUSION_2014 : eventTheme;
   }
 
   public interface LiveWallpaperDrawableFactory {
